@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agro Bridge BD - Smart Farm-to-Fork Agricultural Marketplace</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & Hind Siliguri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- ScrollReveal.js -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              canvas: '#F4F8F5',
+              card: '#FFFFFF',
+              forest: '#1B5E20',
+              leaf: '#2E7D32',
+              mint: '#E8F5E9',
+              score: '#388E3C',
+              alertRed: '#E53935',
+              alertOrange: '#FB8C00',
+              charcoal: '#1F2937',
+              muted: '#6B7280',
+              navDark: '#0D1527'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Hind Siliguri"', 'sans-serif'],
+            bangla: ['"Hind Siliguri"', 'sans-serif']
+          },
+          boxShadow: {
+            'soft': '0 4px 25px -4px rgba(27, 94, 32, 0.07)',
+            'hover': '0 20px 35px -8px rgba(27, 94, 32, 0.16)',
+            'float': '0 12px 30px -4px rgba(27, 94, 32, 0.22)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F4F8F5;
+      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+      overflow-x: hidden;
+    }
+
+    @keyframes scrollTicker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: scrollTicker 75s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Fixed marquee responsiveness and card sizing */
+    .marquee-card-item {
+      flex: 0 0 auto !important;
+      width: 280px !important;
+      max-width: 85vw !important;
+    }
+    @media (min-width: 640px) {
+      .marquee-card-item {
+        width: 360px !important;
+      }
+    }
+
+    @keyframes scanBeam {
+      0% { top: 6%; opacity: 0; }
+      50% { opacity: 1; }
+      100% { top: 92%; opacity: 0; }
+    }
+    .scanner-beam {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      height: 3px;
+      background: #10B981;
+      box-shadow: 0 0 16px 2px #10B981;
+      animation: scanBeam 2.2s infinite ease-in-out;
+    }
+
+    .auth-input {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .auth-input:hover {
+      border-color: #2E7D32;
+      background-color: rgba(232, 245, 233, 0.3);
+      transform: translateY(-1px);
+    }
+    .auth-input:focus {
+      outline: none;
+      border-color: #1B5E20;
+      background-color: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.18), 0 6px 20px -2px rgba(27, 94, 32, 0.16);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between text-brand-charcoal antialiased">
+
+  <!-- ================= TOP STICKY GLOBAL HEADER ================= -->
+  <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-emerald-100/80 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2">
+
+      <!-- Brand Logo (Agro.jpeg with Fallback SVG) -->
+      <a href="javascript:void(0)" onclick="handleLogoClick()" class="flex items-center gap-2 group cursor-pointer shrink-0">
+        <div class="h-10 sm:h-12 flex items-center justify-center transition-transform group-hover:scale-105">
+          <img src="Agro.jpeg" onerror="this.onerror=null; this.replaceWith(document.getElementById('fallbackLogoSvg').content.cloneNode(true));" alt="Agro Bridge Logo" class="h-full w-auto max-w-[140px] sm:max-w-[180px] object-contain rounded-lg" />
+        </div>
+      </a>
+      <template id="fallbackLogoSvg">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 flex items-center justify-center text-brand-forest">
+            <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+              <path d="M60 28C57 14 42 12 42 12C42 12 41 30 54 36C50 29 56 20 60 28Z" fill="#388E3C"/>
+              <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#2E7D32"/>
+              <path d="M18 78C38 48 82 48 102 78V72C82 42 38 42 18 72V78Z" fill="#1B5E20"/>
+            </svg>
+          </div>
+          <span class="text-xl font-black text-brand-forest">Agro Bridge</span>
+        </div>
+      </template>
+
+      <!-- DYNAMIC DESKTOP NAVIGATION -->
+      <nav id="desktopNavLinks" class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-gray-700">
+        <!-- BUYER LINKS -->
+        <button onclick="navigateTo('marketplace')" class="nav-link buyer-link hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="marketplace" data-key="navMarketplace">
+          <i data-lucide="store" class="w-4 h-4 text-brand-leaf"></i> <span>Marketplace</span>
+        </button>
+        <button onclick="navigateTo('scanner')" class="nav-link buyer-link hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="scanner" data-key="navScanner">
+          <i data-lucide="scan-line" class="w-4 h-4 text-brand-leaf"></i> <span>AI Quality Scan</span>
+        </button>
+        <button onclick="navigateTo('hubs')" class="nav-link buyer-link hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="hubs" data-key="navHubs">
+          <i data-lucide="map-pin" class="w-4 h-4 text-brand-leaf"></i> <span>Hub Centers</span>
+        </button>
+
+        <!-- FARMER EXCLUSIVE LINKS -->
+        <button onclick="navigateTo('contracts')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="contracts" data-key="navHarvestDesk">
+          <i data-lucide="wallet" class="w-4 h-4 text-brand-leaf"></i> <span>Harvest Desk</span>
+        </button>
+        <button onclick="navigateTo('farmer-prices')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-prices" data-key="navPriceBoard">
+          <i data-lucide="trending-up" class="w-4 h-4 text-brand-leaf"></i> <span>Price Board</span>
+        </button>
+        <button onclick="navigateTo('farmer-dispatch')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-dispatch" data-key="navBatchDispatch">
+          <i data-lucide="truck" class="w-4 h-4 text-brand-leaf"></i> <span>Batch Dispatch</span>
+        </button>
+        <button onclick="navigateTo('farmer-iot')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-iot" data-key="navFieldConditions">
+          <i data-lucide="activity" class="w-4 h-4 text-brand-leaf"></i> <span>Field Conditions</span>
+        </button>
+      </nav>
+
+      <!-- Global Actions -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5">
+        
+        <!-- Non-interactive Role Indicator (Dropdown removed per request) -->
+        <div class="hidden md:flex items-center gap-1.5 bg-brand-mint border border-emerald-200/90 px-3 py-1.5 rounded-xl shadow-xs">
+          <span class="w-2 h-2 rounded-full bg-brand-leaf animate-pulse"></span>
+          <span class="text-[9px] uppercase font-bold text-gray-400" data-key="roleTag">ROLE:</span>
+          <span id="roleIndicatorLabel" class="text-xs font-black text-brand-forest uppercase">RETAIL BUYER</span>
+        </div>
+
+        <!-- Cart Quick Drawer Trigger (Hidden for Farmer) -->
+        <button id="cartHeaderBtn" onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-white border border-emerald-100 text-brand-forest hover:bg-brand-canvas transition hover:scale-105 shrink-0">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span id="cartHeaderBadge" class="absolute -top-1.5 -right-1.5 bg-brand-alertRed text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">2</span>
+        </button>
+
+        <!-- Profile Icon (Acts as Sign-In trigger or profile navigation) -->
+        <button onclick="handleProfileAuthClick()" title="User Profile" class="p-2.5 rounded-xl bg-brand-leaf text-white hover:bg-brand-forest transition shadow-md shadow-brand-leaf/20 hover:scale-105 shrink-0 flex items-center justify-center">
+          <i data-lucide="user" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Mobile Menu Hamburger Button -->
+        <button onclick="toggleMobileNav()" aria-label="Open Navigation Menu" class="lg:hidden p-2 rounded-xl bg-gray-100 text-gray-700 hover:text-brand-forest transition shrink-0">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- FULL SCREEN MOBILE OVERLAY DRAWER (WITH LANGUAGE & PROFILE EMBEDDED) -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 bg-brand-navDark text-white p-6 flex flex-col justify-between hidden transition-opacity duration-300 overflow-y-auto">
+      <div>
+        <div class="flex items-center justify-between pb-6 border-b border-gray-800">
+          <button onclick="toggleMobileNav()" class="text-gray-300 hover:text-white p-1">
+            <i data-lucide="x" class="w-7 h-7"></i>
+          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-black tracking-tight text-white">Agro Bridge</span>
+            <span class="text-[9px] font-black bg-brand-leaf text-white px-2 py-0.5 rounded-full uppercase">BD</span>
+          </div>
+          <button onclick="navigateTo('profile'); toggleMobileNav();" class="text-emerald-400 p-1">
+            <i data-lucide="user" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+        <!-- Role Selector inside mobile menu -->
+        <div class="py-4 border-b border-gray-800 space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1 uppercase tracking-wider">Active Ecosystem Role</label>
+            <select id="mobileRoleSelect" onchange="applyRolePermissions(this.value);" class="w-full py-2.5 px-3 bg-gray-800 text-emerald-400 font-black rounded-xl border border-gray-700 outline-none text-sm cursor-pointer">
+              <option value="buyer">RETAIL BUYER</option>
+              <option value="farmer">CONTRACT FARMER</option>
+              <option value="inspector">HUB STAFF</option>
+              <option value="admin">SYSTEM ADMIN</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-400 mb-1 uppercase tracking-wider">Select Language (ভাষা)</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="setLanguage('en');" id="mobLangEn" class="py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl transition">English</button>
+              <button onclick="setLanguage('bn');" id="mobLangBn" class="py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl transition">বাংলা</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vertical Menu Items -->
+        <div class="py-6 space-y-4 text-base font-bold">
+          <div class="mobile-buyer-link space-y-4">
+            <div><button onclick="navigateTo('home'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="home" class="w-5 h-5 text-emerald-400"></i> Home</button></div>
+            <div><button onclick="navigateTo('marketplace'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="store" class="w-5 h-5 text-emerald-400"></i> Marketplace</button></div>
+            <div><button onclick="navigateTo('scanner'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="scan-line" class="w-5 h-5 text-emerald-400"></i> AI Quality Scanner</button></div>
+            <div><button onclick="navigateTo('hubs'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-emerald-400"></i> Hub Centers</button></div>
+          </div>
+
+          <div class="mobile-farmer-link hidden space-y-4">
+            <div><button onclick="navigateTo('contracts'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i> Harvest Desk</button></div>
+            <div><button onclick="navigateTo('farmer-prices'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i> Price Board</button></div>
+            <div><button onclick="navigateTo('farmer-dispatch'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="truck" class="w-5 h-5 text-emerald-400"></i> Batch Dispatch</button></div>
+            <div><button onclick="navigateTo('farmer-iot'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i> Field Conditions</button></div>
+          </div>
+
+          <div class="pt-2 border-t border-gray-800">
+            <button onclick="navigateTo('profile'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="user-check" class="w-5 h-5 text-emerald-400"></i> My Account Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-800 flex items-center justify-between text-xs text-gray-400">
+        <span>Agro Bridge Ecosystem</span>
+        <button onclick="openAuthModal(); toggleMobileNav();" class="text-emerald-400 font-bold">Login Options</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= ACTIVE VIEW CONTENT CONTAINER ================= -->
+  <main id="mainViewContainer" class="flex-1">
+
+    <!-- ================= BUYER PORTAL CONTAINER ================= -->
+    <div id="buyerPortalContainer">
+      
+      <!-- PAGE 1: HOME & HERO -->
+      <div id="pageHome" class="space-y-16">
+        <section class="relative pt-8 sm:pt-12 pb-8 overflow-hidden header__container">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+              <div class="lg:col-span-7 space-y-5 sm:space-y-6 header__content">
+                <div class="inline-flex items-center gap-2 bg-brand-mint border border-emerald-200 text-brand-forest px-3.5 py-1.5 rounded-full text-xs font-bold">
+                  <span class="w-2 h-2 rounded-full bg-brand-leaf animate-pulse"></span>
+                  <span data-key="heroTag">Guaranteed Freshness Timestamps</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-brand-charcoal tracking-tight leading-[1.15]" data-key="heroTitle">
+                  Bridging the Gap from <span class="text-brand-forest underline decoration-emerald-300 decoration-wavy decoration-2">Field to Fork</span>
+                </h1>
+
+                <p class="section__description text-sm sm:text-lg text-brand-muted leading-relaxed max-w-2xl font-medium" data-key="heroDesc">
+                  Procure fresh, chemical-free vegetables directly from verified farmers. Our AI collection hubs inspect, grade, and timestamp every single batch with dynamic expiry and markdown savings.
+                </p>
+
+                <div class="header__btns flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
+                  <button onclick="navigateTo('marketplace')" class="w-full sm:w-auto px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-brand-forest hover:bg-emerald-900 text-white font-bold text-sm shadow-hover transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                    <span data-key="heroBtnShop">Shop Available Harvest</span>
+                  </button>
+                  <button onclick="navigateTo('scanner')" class="w-full sm:w-auto px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-white hover:bg-brand-mint text-brand-forest border border-emerald-200 font-bold text-sm shadow-soft transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i data-lucide="scan" class="w-4 h-4 text-brand-leaf"></i>
+                    <span data-key="heroBtnScan">Open Universal AI Scanner</span>
+                  </button>
+                </div>
+
+                <div class="pt-6 border-t border-emerald-100 grid grid-cols-3 gap-2 sm:gap-4 max-w-lg">
+                  <div>
+                    <p class="text-xl sm:text-2xl font-black text-brand-forest">4°C Cold</p>
+                    <p class="text-[10px] sm:text-xs text-brand-muted font-semibold" data-key="statCold">Chilled Delivery Chain</p>
+                  </div>
+                  <div>
+                    <p class="text-xl sm:text-2xl font-black text-brand-leaf">0.0%</p>
+                    <p class="text-[10px] sm:text-xs text-brand-muted font-semibold" data-key="statChem">Chemical Pesticides</p>
+                  </div>
+                  <div>
+                    <p class="text-xl sm:text-2xl font-black text-brand-score">100%</p>
+                    <p class="text-[10px] sm:text-xs text-brand-muted font-semibold" data-key="statBuyback">Guaranteed Buyback</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 relative">
+                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-hover border border-emerald-100 relative overflow-hidden transition-all duration-300 hover:shadow-2xl">
+                  <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                      <span class="text-xs font-bold text-brand-forest uppercase tracking-wider">Intake Batch #AG-7721</span>
+                    </div>
+                    <span class="text-xs font-extrabold bg-brand-mint text-brand-leaf px-2.5 py-1 rounded-lg">Grade A Certified</span>
+                  </div>
+
+                  <div class="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden my-4 bg-gray-50 group">
+                    <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=80" alt="Spinach" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div class="scanner-beam"></div>
+                    <div class="absolute bottom-3 left-3 bg-black/65 backdrop-blur-md px-3 py-1.5 rounded-xl text-white text-xs font-mono flex items-center gap-2">
+                      <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                      <span>Freshness Confirmed: 95%</span>
+                    </div>
+                  </div>
+
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-base sm:text-lg font-black text-gray-900">Farm Fresh Spinach (পালং শাক)</h3>
+                        <p class="text-xs text-brand-muted font-medium">Harvested today • Hathazari Hub</p>
+                      </div>
+                      <div class="text-right">
+                        <span class="text-lg sm:text-xl font-black text-brand-forest">BDT 10.90</span>
+                        <p class="text-[10px] text-gray-400">per bundle</p>
+                      </div>
+                    </div>
+
+                    <div class="bg-brand-canvas p-3 rounded-2xl flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-5 h-5 text-brand-leaf"></i>
+                        <div>
+                          <p class="text-[11px] font-bold text-brand-forest">AI Freshness Score</p>
+                          <p class="text-xs text-gray-500">Estimated Shelf Life: <span class="font-bold text-gray-800">5 Days</span></p>
+                        </div>
+                      </div>
+                      <span class="text-sm font-black bg-brand-mint text-brand-leaf px-3 py-1.5 rounded-xl">95%</span>
+                    </div>
+
+                    <button onclick="addToCart('Farm Fresh Spinach', 10.90)" class="w-full py-3.5 bg-brand-forest hover:bg-emerald-900 text-white font-bold rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5">
+                      <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                      <span data-key="btnAddToCart">Add to Cart</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- 15-Vegetable Infinite Marquee Ribbon -->
+        <section class="py-9 bg-white border-y border-emerald-100 overflow-hidden">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="zap" class="w-5 h-5 text-brand-leaf"></i>
+              <h3 class="text-sm font-extrabold uppercase tracking-widest text-brand-forest" data-key="marqueeTitle">Live Collection Centers Feed (15+ Varieties)</h3>
+            </div>
+            <span class="text-xs text-brand-muted font-semibold hidden sm:inline" data-key="marqueeSub">Real-time inventory from Chattogram, Bogura & Rajshahi</span>
+          </div>
+
+          <div class="overflow-hidden w-full relative">
+            <div id="infiniteMarquee" class="marquee-track flex gap-4 sm:gap-6 py-2 px-2 sm:px-4"></div>
+          </div>
+        </section>
+
+        <!-- Featured Produce Picks -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h2 class="text-xs font-black uppercase tracking-widest text-brand-leaf" data-key="featTag">Daily Direct Harvest</h2>
+              <h3 class="text-2xl sm:text-3xl font-black text-brand-charcoal" data-key="featTitle">Featured Market Picks</h3>
+            </div>
+            <button onclick="navigateTo('marketplace')" class="text-xs sm:text-sm font-bold text-brand-leaf hover:text-brand-forest flex items-center gap-1">
+              <span data-key="featViewAll">View All 15 Vegetables</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <div id="featuredGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </section>
+      </div>
+
+      <!-- PAGE 2: FULL MARKETPLACE & CATALOG -->
+      <div id="pageMarketplace" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-6">
+          <div>
+            <span class="text-xs font-bold text-brand-leaf uppercase tracking-wider" data-key="marketTag">Direct Procurement</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-charcoal" data-key="marketTitle">All Fresh Vegetables</h2>
+            <p class="text-sm text-brand-muted mt-1" data-key="marketDesc">Computer-vision verified moisture, organic certification, and dynamic expiry dates.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-2xl border border-emerald-100 shadow-sm text-xs font-bold">
+            <button onclick="filterProduce('all')" id="tabAll" class="market-tab px-3.5 py-2 rounded-xl bg-brand-forest text-white transition" data-key="filterAll">All Vegetables (15)</button>
+            <button onclick="filterProduce('leafy')" id="tabLeafy" class="market-tab px-3.5 py-2 rounded-xl text-gray-600 hover:text-brand-forest transition" data-key="filterLeafy">Leafy Greens</button>
+            <button onclick="filterProduce('roots')" id="tabRoots" class="market-tab px-3.5 py-2 rounded-xl text-gray-600 hover:text-brand-forest transition" data-key="filterRoots">Roots & Gourds</button>
+            <button onclick="filterProduce('markdown')" id="tabMarkdown" class="market-tab px-3.5 py-2 rounded-xl text-gray-600 hover:text-brand-forest transition flex items-center gap-1.5" data-key="filterMarkdown">
+              <span>Zero-Waste Markdown</span>
+              <span class="w-2 h-2 rounded-full bg-brand-alertOrange"></span>
+            </button>
+          </div>
+        </div>
+
+        <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+      </div>
+
+      <!-- PAGE 3: UNIVERSAL AI QUALITY SCANNER -->
+      <div id="pageScanner" class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-8 hidden">
+        <div class="text-center space-y-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-brand-leaf" data-key="scanHeaderTag">Universal Computer Vision Engine</h2>
+          <h3 class="text-2xl sm:text-3xl font-black text-brand-charcoal" data-key="scanHeaderTitle">Scan Any Produce: Fruit, Veggie or Gourd</h3>
+          <p class="text-xs sm:text-sm text-brand-muted max-w-xl mx-auto" data-key="scanHeaderDesc">Upload an image, trigger your camera feed, or pick any vegetable batch. Our convolutional neural network detects boundary texture, moisture degradation, and surface defects.</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-5 sm:p-8 border border-emerald-100 shadow-soft space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-brand-canvas rounded-2xl border border-emerald-100 text-xs">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1" data-key="labelProduceType">Target Produce Type</label>
+              <select id="universalProduceSelect" onchange="onProduceSelectChange(this.value)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl font-semibold text-brand-charcoal focus:ring-2 focus:ring-brand-leaf focus:outline-none">
+                <option value="custom">Generic Auto-Detect (Any Produce)</option>
+                <option value="tomato">Red Vine Tomato (টমেটো)</option>
+                <option value="karela">Bitter Gourd / Karela (করলা)</option>
+                <option value="lettuce">Fresh Crisp Lettuce (লেটুস)</option>
+                <option value="cucumber">Green Cucumber (শসা)</option>
+                <option value="carrot">Sweet Carrots (গাজর)</option>
+                <option value="potato">Diamant Potato (গোল আলু)</option>
+                <option value="capsicum">Capsicum (ক্যাপসিকাম)</option>
+                <option value="spinach">Organic Spinach (পালং শাক)</option>
+                <option value="eggplant">Eggplant (বেগুন)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-gray-700 mb-1" data-key="labelUploadPhoto">Upload Photo / Capture</label>
+              <input type="file" id="imageUploadInput" accept="image/*" onchange="handleImageUpload(event)" class="w-full text-xs file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-mint file:text-brand-forest hover:file:bg-emerald-200 cursor-pointer pt-0.5" />
+            </div>
+
+            <div>
+              <label class="block font-bold text-gray-700 mb-1" data-key="labelHardware">Device Hardware</label>
+              <button onclick="toggleWebcamStream()" id="webcamToggleBtn" class="w-full py-2.5 px-3 bg-white border border-gray-200 hover:border-brand-leaf rounded-xl font-bold text-gray-700 flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="video" class="w-3.5 h-3.5 text-brand-leaf"></i>
+                <span id="webcamBtnText" data-key="btnCamEnable">Enable Live Camera</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden bg-black flex items-center justify-center">
+            <img id="scannerViewportImg" src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=1000&q=80" alt="Produce under camera" class="w-full h-full object-cover opacity-85" />
+            <video id="webcamVideoElement" class="w-full h-full object-cover hidden" autoplay playsinline></video>
+
+            <div class="scanner-beam"></div>
+
+            <div class="absolute inset-4 sm:inset-10 border-2 border-emerald-400 rounded-2xl flex flex-col justify-between p-3 pointer-events-none">
+              <div class="flex justify-between items-center">
+                <span id="cvDetectTag" class="bg-brand-forest text-white text-[10px] sm:text-[11px] font-mono px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md shadow">Class: Auto-Detect [96.4%]</span>
+                <span id="cvMoistureTag" class="bg-black/70 backdrop-blur-md text-emerald-300 text-[10px] sm:text-[11px] font-mono px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md">Moisture: 89%</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span id="cvDefectTag" class="bg-black/70 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-mono px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md">Defect: 0.01%</span>
+                <span id="cvGradeTag" class="bg-brand-leaf text-white text-[10px] sm:text-[11px] font-mono px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md">Grade: A Certified</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+            <p class="text-xs text-brand-muted font-semibold" data-key="scanEngineNote">
+              Supported models: YOLOv8-Produce, Texture-CNN & Chlorophyll Index.
+            </p>
+
+            <button onclick="triggerUniversalAnalysis()" id="runUniversalScanBtn" class="w-full sm:w-auto px-7 py-3.5 bg-brand-forest hover:bg-emerald-900 text-white font-bold text-xs rounded-xl transition shadow flex items-center justify-center gap-2 hover:-translate-y-0.5">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span data-key="btnRunInference">Run Computer Vision Inference</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-4 border-t border-gray-100">
+            <div class="bg-brand-canvas p-3 sm:p-4 rounded-2xl border border-emerald-50 text-center">
+              <p class="text-[10px] sm:text-xs font-bold text-brand-muted uppercase" data-key="cardDetectedBatch">Detected Batch</p>
+              <p id="cvProduceNameDisplay" class="text-sm sm:text-base font-black text-brand-charcoal mt-1 truncate">Red Vine Tomato</p>
+            </div>
+            <div class="bg-brand-canvas p-3 sm:p-4 rounded-2xl border border-emerald-50 text-center">
+              <p class="text-[10px] sm:text-xs font-bold text-brand-muted uppercase" data-key="cardFreshnessIndex">Freshness Index</p>
+              <p id="cvScoreDisplay" class="text-xl sm:text-2xl font-black text-brand-forest mt-1">94%</p>
+            </div>
+            <div class="bg-brand-canvas p-3 sm:p-4 rounded-2xl border border-emerald-50 text-center">
+              <p class="text-[10px] sm:text-xs font-bold text-brand-muted uppercase" data-key="cardDynamicShelf">Dynamic Shelf Life</p>
+              <p id="cvShelfDisplay" class="text-xl sm:text-2xl font-black text-brand-leaf mt-1">5 Days</p>
+            </div>
+            <div class="bg-brand-canvas p-3 sm:p-4 rounded-2xl border border-emerald-50 text-center">
+              <p class="text-[10px] sm:text-xs font-bold text-brand-muted uppercase" data-key="cardChemicalTrace">Chemical Trace</p>
+              <p id="cvPesticideDisplay" class="text-xl sm:text-2xl font-black text-brand-score mt-1">0.0% Clean</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 4: HUB EXPERIENCE CENTERS -->
+      <div id="pageHubs" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+        <div>
+          <h2 class="text-xs font-black uppercase tracking-widest text-brand-leaf" data-key="hubsTag">Physical Sourcing Network</h2>
+          <h3 class="text-2xl sm:text-3xl font-black text-brand-charcoal" data-key="hubsTitle">Offline Experience & Quality Centers</h3>
+          <p class="text-sm text-brand-muted mt-1" data-key="hubsDesc">Inspect produce before pickup, test computer vision spectrometers, or schedule contract drop-offs.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] font-black bg-brand-mint text-brand-forest px-2.5 py-1 rounded-full uppercase">Main Hub</span>
+                <h4 class="text-lg font-bold text-gray-900 mt-2">Agrabad Commercial Hub</h4>
+                <p class="text-xs text-brand-muted">Agrabad C/A, Chattogram</p>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-brand-forest flex items-center justify-center">
+                <i data-lucide="warehouse" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed">Equipped with 2 automated conveyor scanning lanes, cold refrigeration (4°C), and customer touch-and-feel pantry shelves.</p>
+            <div class="border-t pt-3 flex justify-between text-xs font-bold text-brand-forest">
+              <span>Daily Capacity: 12 Tons</span>
+              <span class="text-brand-leaf">Open: 6:00 AM - 10:00 PM</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] font-black bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full uppercase">Retail Center</span>
+                <h4 class="text-lg font-bold text-gray-900 mt-2">GEC Experience Center</h4>
+                <p class="text-xs text-brand-muted">GEC Circle, Nasirabad, Chattogram</p>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-brand-forest flex items-center justify-center">
+                <i data-lucide="store" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed">Direct-to-consumer flagship store where urban families verify QR codes and purchase dynamic markdown produce in person.</p>
+            <div class="border-t pt-3 flex justify-between text-xs font-bold text-brand-forest">
+              <span>Customer Counter: 4</span>
+              <span class="text-brand-leaf">Open: 8:00 AM - 11:00 PM</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] font-black bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full uppercase">Wholesale Hub</span>
+                <h4 class="text-lg font-bold text-gray-900 mt-2">Uttara Logistics Gateway</h4>
+                <p class="text-xs text-brand-muted">Sector 11, Uttara, Dhaka</p>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-brand-forest flex items-center justify-center">
+                <i data-lucide="truck" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed">B2B wholesale terminal receiving inter-district chilled reefer trucks from Bogura and Rajshahi for Dhaka restaurant distribution.</p>
+            <div class="border-t pt-3 flex justify-between text-xs font-bold text-brand-forest">
+              <span>Bulk Bay: 6 Trucks</span>
+              <span class="text-brand-leaf">24/7 Operations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= USER PROFILE VIEW (/profile) ================= -->
+    <div id="pageProfile" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+      <div class="flex items-center justify-between border-b pb-6">
+        <div>
+          <span class="text-xs font-bold text-brand-leaf uppercase tracking-wider">Account Overview</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-charcoal">User Profile & Session</h2>
+        </div>
+        <button onclick="openAuthModal()" class="px-4 py-2 bg-brand-mint hover:bg-emerald-200 text-brand-forest text-xs font-bold rounded-xl transition">
+          Switch Role / Re-login
+        </button>
+      </div>
+
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-100 shadow-soft space-y-6">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 pb-6 border-b border-gray-100 text-center sm:text-left">
+          <div class="w-20 h-20 rounded-full bg-brand-mint border-2 border-brand-leaf flex items-center justify-center text-brand-forest text-2xl font-black shrink-0">
+            <i data-lucide="user" class="w-10 h-10"></i>
+          </div>
+          <div class="space-y-1 flex-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 id="profileNameDisplay" class="text-xl font-bold text-gray-900">Registered Partner Account</h3>
+              <span id="profileRoleBadgeDisplay" class="text-[10px] font-black bg-brand-mint text-brand-forest px-3 py-1 rounded-full uppercase self-center sm:self-auto">Retail Buyer</span>
+            </div>
+            <p id="profileEmailDisplay" class="text-xs text-gray-500 font-mono">buyer@agrobridge.bd</p>
+            <p class="text-xs text-brand-leaf font-bold pt-1">Chattogram Central Logistics Hub</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Registered Status</p>
+            <p class="text-sm font-black text-brand-forest mt-1">Verified Agro-ID</p>
+          </div>
+          <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Default Hub Port</p>
+            <p class="text-sm font-black text-brand-charcoal mt-1">Agrabad Commercial Hub</p>
+          </div>
+          <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Payout Gateway</p>
+            <p class="text-sm font-black text-pink-600 mt-1">bKash Linked</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= FARMER WORKSPACE 1: HARVEST DESK (/contracts) ================= -->
+    <div id="pageContracts" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-brand-mint text-brand-forest px-3 py-1 rounded-full text-xs font-bold mb-2">
+            <span class="w-2 h-2 rounded-full bg-brand-forest"></span>
+            Partner Portal: <span id="partnerRoleLabel">Contract Farmer Terminal</span>
+          </div>
+          <h3 id="contractHeading" class="text-2xl sm:text-3xl font-black text-brand-charcoal">Contract Farming & Guaranteed Rates</h3>
+          <p id="contractSubheading" class="text-xs text-brand-muted mt-1">Manage seasonal guaranteed buyback contracts, schedule regional hub drop-offs, and monitor payouts.</p>
+        </div>
+      </div>
+
+      <div id="roleContentContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
+    </div>
+
+    <!-- ================= FARMER WORKSPACE 2: LIVE PRICE BOARD ================= -->
+    <div id="pageFarmerPrices" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-6">
+        <div>
+          <span class="text-xs font-bold text-brand-leaf uppercase tracking-wider">Transparent Commodity Exchange</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-charcoal">Farmer Guaranteed Price Board</h2>
+          <p class="text-xs text-brand-muted mt-1">Compare Agro Bridge fixed buyback rates with traditional middleman (Faria) market pricing across all 15 varieties.</p>
+        </div>
+        <div class="flex items-center gap-2 bg-brand-mint px-4 py-2 rounded-2xl border border-emerald-200 text-xs font-bold text-brand-forest">
+          <span class="w-2 h-2 rounded-full bg-brand-leaf animate-ping"></span>
+          <span>Chattogram & Regional Hub Rates Updated Live</span>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-emerald-100 shadow-soft overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs min-w-[600px]">
+            <thead class="bg-brand-canvas text-gray-500 font-bold uppercase tracking-wider text-[10px] border-b border-gray-100">
+              <tr>
+                <th class="py-3.5 px-6">Produce Item</th>
+                <th class="py-3.5 px-6">Agro Bridge Buyback</th>
+                <th class="py-3.5 px-6">Local Faria Benchmark</th>
+                <th class="py-3.5 px-6">Farmer Margin Lift</th>
+                <th class="py-3.5 px-6 text-right">Instant Action</th>
+              </tr>
+            </thead>
+            <tbody id="farmerPriceTableBody" class="divide-y divide-gray-100 font-semibold text-gray-800"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= FARMER WORKSPACE 3: BATCH DISPATCH ================= -->
+    <div id="pageFarmerDispatch" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+      <div class="border-b pb-4">
+        <span class="text-xs font-bold text-brand-leaf uppercase tracking-wider">Harvest Logistics</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-brand-charcoal">Dispatch Harvest to Regional Hub</h2>
+        <p class="text-xs text-brand-muted mt-1">Schedule your vegetable drop-off to bypass middleman deductions.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
+        <form onsubmit="handleFarmerDispatchSubmit(event)" class="md:col-span-7 bg-white p-5 sm:p-8 rounded-3xl border border-emerald-100 shadow-soft space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Select Crop</label>
+            <select id="dispatchCropSelect" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 font-semibold auth-input">
+              <option>Red Vine Tomatoes (টমেটো)</option>
+              <option>Bitter Gourd / Karela (করলা)</option>
+              <option>Green Cucumbers (শসা)</option>
+              <option>Organic Sweet Carrots (গাজর)</option>
+              <option>Diamant Potatoes (গোল আলু)</option>
+              <option>Fresh Crisp Lettuce (লেটুস)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Estimated Weight (kg)</label>
+              <input type="number" id="dispatchWeightInput" value="120" min="10" max="5000" class="w-full p-3 border border-gray-200 rounded-xl font-bold auth-input text-sm" required />
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Target Regional Hub</label>
+              <select class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 font-semibold auth-input">
+                <option>Chattogram (Agrabad Hub)</option>
+                <option>Chattogram (Hathazari Hub)</option>
+                <option>Bogura (Sadar Hub)</option>
+                <option>Dhaka (Uttara Hub)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Harvest Time & Delivery Slot</label>
+            <input type="datetime-local" class="w-full p-3 border border-gray-200 rounded-xl auth-input font-medium" required />
+          </div>
+
+          <button type="submit" class="w-full py-4 bg-brand-forest hover:bg-emerald-900 text-white font-black rounded-2xl text-sm shadow-md transition-all flex items-center justify-center gap-2">
+            <i data-lucide="qr-code" class="w-4 h-4"></i>
+            <span>Confirm Batch & Generate Intake Token</span>
+          </button>
+        </form>
+
+        <div class="md:col-span-5 space-y-4">
+          <div class="bg-brand-mint p-5 sm:p-6 rounded-3xl border border-emerald-200/80 space-y-3">
+            <h4 class="font-extrabold text-brand-forest text-sm flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-brand-leaf"></i>
+              <span>Guaranteed Rate Protection</span>
+            </h4>
+            <p class="text-xs text-gray-700 leading-relaxed">
+              Once you book an intake token, your price floor is locked at today's benchmark rate. Weight certified by calibrated digital scales upon hub intake.
+            </p>
+          </div>
+
+          <div id="generatedTokenCard" class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft text-center space-y-3 hidden">
+            <p class="text-[10px] font-black uppercase tracking-wider text-brand-leaf">Hub Check-In QR Token</p>
+            <div class="w-32 h-32 bg-gray-100 border border-emerald-200 rounded-2xl mx-auto flex items-center justify-center p-2">
+              <i data-lucide="qr-code" class="w-20 h-20 text-brand-forest"></i>
+            </div>
+            <p id="tokenCodeDisplay" class="font-mono font-black text-base text-gray-900">#TK-8821-CHT</p>
+            <p class="text-[10px] text-gray-400">Show this QR code at the reception conveyor gate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= FARMER WORKSPACE 4: FIELD CONDITIONS ================= -->
+    <div id="pageFarmerIot" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+      <div class="border-b pb-4">
+        <span class="text-xs font-bold text-brand-leaf uppercase tracking-wider">Field Diagnostics</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-brand-charcoal">Real-Time Soil & Growth Conditions</h2>
+        <p class="text-xs text-brand-muted mt-1">Live metrics from your farm plot (Hathazari Sector 4).</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft text-center space-y-2">
+          <p class="text-xs font-bold text-gray-400 uppercase">Soil Moisture</p>
+          <p class="text-3xl sm:text-4xl font-black text-brand-forest">78%</p>
+          <span class="text-[10px] font-bold bg-brand-mint text-brand-leaf px-2.5 py-1 rounded-full inline-block">Optimal Field Hydration</span>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft text-center space-y-2">
+          <p class="text-xs font-bold text-gray-400 uppercase">NPK Ratio</p>
+          <p class="text-3xl sm:text-4xl font-black text-brand-leaf">14:14:14</p>
+          <span class="text-[10px] font-bold bg-brand-mint text-brand-leaf px-2.5 py-1 rounded-full inline-block">100% Bio-Fertilized</span>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft text-center space-y-2">
+          <p class="text-xs font-bold text-gray-400 uppercase">Microclimate Temp</p>
+          <p class="text-3xl sm:text-4xl font-black text-brand-charcoal">27.4°C</p>
+          <span class="text-[10px] font-bold bg-brand-mint text-brand-leaf px-2.5 py-1 rounded-full inline-block">Low Heat-Stress</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= SLIDE-OVER CART & CHECKOUT DRAWER ================= -->
+  <div id="cartDrawer" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="cartDrawerContent" class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between p-5 sm:p-6 transform translate-x-full transition-transform duration-300">
+
+      <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-forest"></i>
+          <h3 class="font-extrabold text-lg text-gray-900" data-key="cartTitle">Your Fresh Cart</h3>
+        </div>
+        <button onclick="toggleCartDrawer()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="cartItemsList" class="flex-1 overflow-y-auto py-4 space-y-3"></div>
+
+      <div class="pt-4 border-t border-gray-100 space-y-4 text-xs">
+        <div class="space-y-1.5 text-gray-600">
+          <div class="flex justify-between">
+            <span data-key="cartSubtotal">Subtotal</span>
+            <span id="drawerSubtotal" class="font-bold text-gray-900">BDT 0.00</span>
+          </div>
+          <div class="flex justify-between">
+            <span data-key="cartTransit">Cold-Chain Insulated Transit</span>
+            <span class="font-bold text-brand-leaf">FREE</span>
+          </div>
+          <div class="flex justify-between text-base font-black text-brand-forest pt-2 border-t">
+            <span data-key="cartTotal">Total Payable</span>
+            <span id="drawerTotal">BDT 0.00</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-[10px]" data-key="cartGateway">Select Payment Gateway</label>
+          <div class="grid grid-cols-3 gap-2">
+            <!-- bKash Image Tag -->
+            <button type="button" onclick="selectPayMethod('bkash')" id="payBkash" class="py-2 px-1 rounded-xl bg-pink-50 border-2 border-pink-500 flex flex-col items-center justify-center gap-1 transition shadow-sm hover:scale-105">
+              <img src="bkash-logo.png" onerror="this.outerHTML='<span class=\'text-pink-600 font-black text-xs\'>bKash</span>'" alt="bKash" class="h-6 object-contain" />
+              <span class="text-[10px] font-black text-pink-700">bKash</span>
+            </button>
+
+            <!-- Nagad Vector SVG Emblem -->
+            <button type="button" onclick="selectPayMethod('nagad')" id="payNagad" class="py-2 px-1 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center gap-1 transition hover:scale-105">
+              <svg class="h-6 w-auto" viewBox="0 0 100 100" fill="none">
+                <path d="M78 30C86 42 85 58 75 70C65 82 48 88 33 83C18 78 8 63 9 47C10 31 22 18 37 13C50 9 64 12 73 21" stroke="#ED1C24" stroke-width="12" stroke-linecap="round"/>
+                <path d="M50 15C60 25 65 40 60 55C55 70 40 80 25 78" stroke="#F7941D" stroke-width="12" stroke-linecap="round"/>
+                <path d="M68 25C78 38 78 52 70 65" stroke="#F7941D" stroke-width="10" stroke-linecap="round"/>
+              </svg>
+              <span class="text-[10px] font-black text-gray-700">Nagad</span>
+            </button>
+
+            <!-- Visa Image Tag with visa.png fallback -->
+            <button type="button" onclick="selectPayMethod('card')" id="payCard" class="py-2 px-1 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center gap-1 transition hover:scale-105">
+              <img src="visa.png" onerror="this.src='visa-logo.png'; this.onerror=function(){this.outerHTML='<span class=\'text-blue-700 font-black text-xs\'>Visa</span>'}" alt="Visa" class="h-6 object-contain" />
+              <span class="text-[10px] font-black text-gray-700">Visa/Card</span>
+            </button>
+          </div>
+        </div>
+
+        <button onclick="executeCheckout()" class="w-full py-4 bg-brand-forest hover:bg-emerald-900 text-white font-black rounded-2xl text-sm shadow-md transition-all" data-key="btnConfirmOrder">
+          Confirm Order & Dispatch
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= AUTHENTICATION MODAL ================= -->
+  <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[520px] sm:min-h-[580px] border border-emerald-100 relative transform scale-95 transition-transform duration-300 max-h-[95vh] overflow-y-auto" id="authModalContent">
+
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 z-30 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-gray-600 hover:text-black hover:bg-white shadow transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- LEFT SIDE PICTURE -->
+      <div class="w-full md:w-1/2 relative bg-brand-forest flex flex-col justify-between p-6 sm:p-8 text-white overflow-hidden min-h-[220px] md:min-h-auto">
+        <img 
+          src="SignIn%20page%20leftside.jpeg" 
+          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1592417817098-8f3d69102353?auto=format&fit=crop&w=1200&q=85';"
+          alt="Smiling Farmer with Harvest Basket" 
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/75 via-transparent to-black/35 pointer-events-none"></div>
+
+        <div class="relative z-10">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center p-1.5 border border-white/30 shadow-md">
+              <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-emerald-300">
+                <path d="M60 28C57 14 42 12 42 12C42 12 41 30 54 36C50 29 56 20 60 28Z" fill="#86EFAC"/>
+                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#2E7D32"/>
+                <path d="M18 78C38 48 82 48 102 78V72C82 42 38 42 18 72V78Z" fill="#86EFAC"/>
+              </svg>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black tracking-tight text-white drop-shadow">Agro Bridge</h3>
+          </div>
+        </div>
+
+        <div class="relative z-10 pt-4 border-t border-white/25 text-xs text-emerald-100 flex justify-between font-bold drop-shadow">
+          <span>Enterprise Agro Logistics</span>
+          <span>Chattogram • Dhaka</span>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: LOGIN FORM -->
+      <div class="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center bg-white space-y-4 sm:space-y-5 relative">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-black text-brand-forest tracking-tight">Welcome</h2>
+            <p class="text-xs text-gray-500 font-medium">Login with Email or Phone Number</p>
+          </div>
+
+          <div class="flex flex-col items-end">
+            <span class="text-[9px] font-black uppercase tracking-wider text-brand-leaf bg-brand-mint px-2 py-0.5 rounded-md mb-1">TEST USERS</span>
+            <select id="testUserRoleSelect" onchange="applyRolePermissions(this.value); closeAuthModal();" class="text-[11px] font-bold bg-white text-gray-700 border border-gray-200 rounded-lg px-2 py-1 focus:ring-2 focus:ring-brand-leaf focus:outline-none cursor-pointer hover:border-brand-leaf transition shadow-xs">
+              <option value="buyer">Retail Buyer</option>
+              <option value="farmer">Contract Farmer</option>
+              <option value="inspector">Hub Staff</option>
+              <option value="admin">System Admin</option>
+            </select>
+          </div>
+        </div>
+
+        <form onsubmit="handleAuthSubmit(event)" class="space-y-3 sm:space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Email or Phone Number</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </span>
+              <input 
+                type="text" 
+                id="authEmailInput" 
+                placeholder="017xxxxxxxx or name@mail.com" 
+                class="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl auth-input text-sm" 
+                required 
+              />
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block font-bold text-gray-700">Password</label>
+              <a href="#" class="text-[11px] text-brand-leaf hover:underline font-semibold">Forgot password?</a>
+            </div>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+              </span>
+              <input 
+                type="password" 
+                value="••••••••••••"
+                placeholder="••••••••••••••••" 
+                class="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl auth-input text-sm" 
+                required 
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full py-3 sm:py-3.5 bg-brand-forest hover:bg-emerald-900 text-white font-black rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <span>LOGIN</span>
+          </button>
+        </form>
+
+        <div class="relative flex items-center justify-center">
+          <div class="border-t border-gray-200 w-full"></div>
+          <span class="bg-white px-3 text-[10px] text-gray-400 font-bold uppercase tracking-wider">OR</span>
+          <div class="border-t border-gray-200 w-full"></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 sm:gap-3">
+          <button onclick="alert('Google Auth connected.')" class="py-2 sm:py-2.5 px-3 border border-gray-200 hover:border-brand-leaf hover:bg-gray-50 rounded-xl flex items-center justify-center transition hover:-translate-y-0.5">
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+          </button>
+
+          <button onclick="alert('Facebook Auth connected.')" class="py-2 sm:py-2.5 px-3 border border-gray-200 hover:border-brand-leaf hover:bg-gray-50 rounded-xl flex items-center justify-center transition hover:-translate-y-0.5">
+            <svg class="w-4 h-4" fill="#1877F2" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </button>
+
+          <button onclick="alert('Apple ID connected.')" class="py-2.5 px-3 border border-gray-200 hover:border-brand-leaf hover:bg-gray-50 rounded-xl flex items-center justify-center transition hover:-translate-y-0.5">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.61 1.34-.55.63-.99 1.66-.86 2.68 1.01.08 2.02-.51 2.54-1.17z"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="text-center text-xs text-gray-500 pt-1">
+          Don't have an account? 
+          <a href="javascript:void(0)" onclick="openRoleSelectionModal()" class="text-brand-leaf font-bold hover:underline">Register Now</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ROLE SELECTION POPUP MODAL ================= -->
+  <div id="roleSelectionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 text-center space-y-6 border border-emerald-100 shadow-2xl relative">
+
+      <button onclick="closeRoleSelectionModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div>
+        <div class="w-12 h-12 rounded-2xl bg-brand-mint text-brand-forest flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="users" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-2xl font-black text-brand-forest">Choose Your Account Type</h3>
+        <p class="text-xs text-brand-muted mt-1">Select your ecosystem role to set up your permissions.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-left">
+        <div onclick="selectRegistrationRole('buyer')" class="p-4 rounded-2xl border-2 border-emerald-100 bg-brand-canvas hover:border-brand-leaf hover:bg-white transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-md hover:-translate-y-1">
+          <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-brand-leaf shadow-sm mb-2 group-hover:bg-brand-forest group-hover:text-white transition">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-sm font-bold text-gray-900">Retail Buyer</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Order fresh vegetables with live AI expiry & door delivery.</p>
+        </div>
+
+        <div onclick="selectRegistrationRole('farmer')" class="p-4 rounded-2xl border-2 border-emerald-100 bg-brand-canvas hover:border-brand-leaf hover:bg-white transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-md hover:-translate-y-1">
+          <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-brand-leaf shadow-sm mb-2 group-hover:bg-brand-forest group-hover:text-white transition">
+            <i data-lucide="sprout" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-sm font-bold text-gray-900">Contract Farmer</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Guaranteed buyback pricing, bio inputs & bKash payouts.</p>
+        </div>
+
+        <div onclick="selectRegistrationRole('inspector')" class="p-4 rounded-2xl border-2 border-emerald-100 bg-brand-canvas hover:border-brand-leaf hover:bg-white transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-md hover:-translate-y-1">
+          <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-brand-leaf shadow-sm mb-2 group-hover:bg-brand-forest group-hover:text-white transition">
+            <i data-lucide="scan-line" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-sm font-bold text-gray-900">Hub Staff</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Operate intake conveyor scanners & print QR barcode tags.</p>
+        </div>
+
+        <div onclick="selectRegistrationRole('admin')" class="p-4 rounded-2xl border-2 border-emerald-100 bg-brand-canvas hover:border-brand-leaf hover:bg-white transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-md hover:-translate-y-1">
+          <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-brand-leaf shadow-sm mb-2 group-hover:bg-brand-forest group-hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-sm font-bold text-gray-900">System Admin</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Manage supply chain, price rules, and export clearances.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= REGISTRATION FORM MODAL ================= -->
+  <div id="registrationFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[520px] sm:min-h-[580px] border border-emerald-100 relative transform scale-95 transition-transform duration-300 max-h-[95vh] overflow-y-auto" id="regModalContent">
+
+      <button onclick="closeRegistrationFormModal()" class="absolute top-4 right-4 z-30 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-gray-600 hover:text-black hover:bg-white shadow transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="w-full md:w-1/2 relative bg-brand-forest flex flex-col justify-between p-6 sm:p-8 text-white overflow-hidden min-h-[220px] md:min-h-auto">
+        <img 
+          src="SignIn%20page%20leftside.jpeg" 
+          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1592417817098-8f3d69102353?auto=format&fit=crop&w=1200&q=85';"
+          alt="Smiling Farmer with Harvest Basket" 
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/75 via-transparent to-black/35 pointer-events-none"></div>
+
+        <div class="relative z-10">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center p-1.5 border border-white/30 shadow-md">
+              <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-emerald-300">
+                <path d="M60 28C57 14 42 12 42 12C42 12 41 30 54 36C50 29 56 20 60 28Z" fill="#86EFAC"/>
+                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#2E7D32"/>
+                <path d="M18 78C38 48 82 48 102 78V72C82 42 38 42 18 72V78Z" fill="#86EFAC"/>
+              </svg>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black tracking-tight text-white drop-shadow">Agro Bridge</h3>
+          </div>
+        </div>
+
+        <div class="relative z-10 pt-4 border-t border-white/25 text-xs text-emerald-100 flex justify-between font-bold drop-shadow">
+          <span>Enterprise Agro Logistics</span>
+          <span>Chattogram • Dhaka</span>
+        </div>
+      </div>
+
+      <div class="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center bg-white space-y-4">
+        <div>
+          <span id="regRoleBadge" class="text-[10px] font-black bg-brand-mint text-brand-forest px-2.5 py-1 rounded-full uppercase">Retail Buyer Account</span>
+          <h3 class="text-2xl font-black text-brand-charcoal mt-2">Create Your Account</h3>
+          <p class="text-xs text-brand-muted">Fill out your details to join the Agro Bridge network.</p>
+        </div>
+
+        <form onsubmit="handleRegistrationSubmit(event)" class="space-y-3.5 text-xs">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Full Name</label>
+            <input type="text" id="regName" placeholder="Abdul Karim / Tanvir Ahmed" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl auth-input text-sm" required />
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Email or Phone Number</label>
+            <input type="text" id="regContact" placeholder="017xxxxxxxx or name@mail.com" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl auth-input text-sm" required />
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Password</label>
+            <input type="password" placeholder="••••••••••••" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl auth-input text-sm" required />
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">District / Hub Location</label>
+            <select class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl bg-gray-50 auth-input font-semibold text-gray-700">
+              <option>Chattogram (Agrabad Hub)</option>
+              <option>Chattogram (Hathazari Hub)</option>
+              <option>Dhaka (Uttara Hub)</option>
+              <option>Bogura (Sadar Hub)</option>
+              <option>Rajshahi Hub</option>
+            </select>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-brand-forest hover:bg-emerald-900 text-white font-bold rounded-xl text-xs shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0">
+            COMPLETE REGISTRATION
+          </button>
+        </form>
+
+        <p class="text-center text-xs text-gray-500 pt-1">
+          Already have an account? 
+          <a href="javascript:void(0)" onclick="closeRegistrationFormModal(); openAuthModal();" class="text-brand-leaf font-bold hover:underline">Sign In</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white border-t border-emerald-100 py-12 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8 text-xs">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-8 h-8 flex items-center justify-center p-0.5">
+              <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-brand-forest">
+                <path d="M60 28C57 14 42 12 42 12C42 12 41 30 54 36C50 29 56 20 60 28Z" fill="#388E3C"/>
+                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#2E7D32"/>
+                <path d="M18 78C38 48 82 48 102 78V72C82 42 38 42 18 72V78Z" fill="#1B5E20"/>
+              </svg>
+            </div>
+            <span class="text-base font-black text-brand-forest">Agro Bridge BD</span>
+          </div>
+          <p class="text-brand-muted leading-relaxed" data-key="footerTagline">
+            Direct farm procurement with guaranteed prices, certified weights, and cold-chain supply across Bangladesh.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-bold text-gray-900 mb-3 uppercase tracking-wider text-[11px]" data-key="footerProdCats">Produce Categories</h4>
+          <ul class="space-y-2 text-brand-muted font-medium">
+            <li><a href="javascript:void(0)" onclick="navigateTo('marketplace'); filterProduce('leafy')" class="hover:text-brand-forest">Leafy Greens</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('marketplace'); filterProduce('all')" class="hover:text-brand-forest">Vine Tomatoes & Cucumbers</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('marketplace'); filterProduce('roots')" class="hover:text-brand-forest">Roots, Gourds & Tubers</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('marketplace'); filterProduce('markdown')" class="hover:text-brand-forest">Zero-Waste Markdown Deals</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-gray-900 mb-3 uppercase tracking-wider text-[11px]" data-key="footerPortals">Partner Portals</h4>
+          <ul class="space-y-2 text-brand-muted font-medium">
+            <li><a href="javascript:void(0)" onclick="applyRolePermissions('farmer')" class="hover:text-brand-forest font-bold text-brand-leaf">Contract Farmer Portal</a></li>
+            <li><a href="javascript:void(0)" onclick="applyRolePermissions('inspector')" class="hover:text-brand-forest font-bold text-brand-leaf">Hub Operator Console</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('hubs')" class="hover:text-brand-forest">Regional Collection Centers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-3 uppercase tracking-wider text-[11px]" data-key="footerPayments">Payment Methods Supported</h4>
+          <div class="flex items-center gap-2.5 pt-1">
+            <div class="px-3 py-1.5 rounded-xl bg-pink-50 border border-pink-200 flex items-center gap-1.5">
+              <img src="bkash-logo.png" onerror="this.outerHTML='<span class=\'text-pink-600 font-black text-xs\'>bKash</span>'" alt="bKash" class="h-4 object-contain" />
+              <span class="text-[10px] font-black text-pink-700">bKash</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-xl bg-orange-50 border border-orange-200 flex items-center gap-1.5">
+              <svg class="h-4 w-auto" viewBox="0 0 100 100" fill="none">
+                <path d="M78 30C86 42 85 58 75 70C65 82 48 88 33 83C18 78 8 63 9 47C10 31 22 18 37 13C50 9 64 12 73 21" stroke="#ED1C24" stroke-width="12" stroke-linecap="round"/>
+                <path d="M50 15C60 25 65 40 60 55C55 70 40 80 25 78" stroke="#F7941D" stroke-width="12" stroke-linecap="round"/>
+                <path d="M68 25C78 38 78 52 70 65" stroke="#F7941D" stroke-width="10" stroke-linecap="round"/>
+              </svg>
+              <span class="text-[10px] font-black text-orange-700">Nagad</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200 flex items-center gap-1.5">
+              <img src="visa.png" onerror="this.src='visa-logo.png'; this.onerror=function(){this.outerHTML='<span class=\'text-blue-700 font-black text-xs\'>Visa</span>'}" alt="Visa" class="h-4 object-contain" />
+              <span class="text-[10px] font-black text-gray-700">Visa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted font-medium">
+        <p>© 2026 Agro Bridge BD Limited. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-brand-forest">Terms of Service</a>
+          <a href="#" class="hover:text-brand-forest">Privacy Policy</a>
+          <a href="#" class="hover:text-brand-forest">Cold-Chain Standards</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= SCRIPT & DATA LOGIC ================= -->
+  <script>
+    const VEGETABLES = [
+      { id: 1, name: "Tomatoes", bangla: "টমেটো", cat: "all", price: 38, oldPrice: 58, faria: 24, disc: "35% OFF", score: 92, shelf: "5 Days", origin: "Hathazari, Chattogram", img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80" },
+      { id: 2, name: "Green Cucumbers", bangla: "শসা", cat: "all", price: 28, oldPrice: 45, faria: 18, disc: "38% OFF", score: 88, shelf: "4 Days", origin: "Bogura Sadar Hub", img: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=500&q=80" },
+      { id: 3, name: "Organic Sweet Carrots", bangla: "গাজর", cat: "roots", price: 45, oldPrice: 56, faria: 30, disc: "20% OFF", score: 96, shelf: "6 Days", origin: "Rajshahi Farm Hub", img: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=500&q=80" },
+      { id: 4, name: "Fresh Crisp Lettuce", bangla: "লেটুস", cat: "leafy", price: 22, oldPrice: 30, faria: 14, disc: "Grade A", score: 91, shelf: "5 Days", origin: "Agrabad Hub", img: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=500&q=80" },
+      { id: 5, name: "Farm Fresh Spinach", bangla: "পালং শাক", cat: "leafy", price: 10.90, oldPrice: 15, faria: 6, disc: "Fresh", score: 95, shelf: "5 Days", origin: "Hathazari Hub", img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=500&q=80" },
+      { id: 6, name: "Diamant Potatoes", bangla: "গোল আলু", cat: "roots", price: 32, oldPrice: 40, faria: 21, disc: "Export", score: 98, shelf: "20 Days", origin: "Munshiganj Hub", img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=500&q=80" },
+      { id: 7, name: "Bell Peppers", bangla: "ক্যাপসিকাম", cat: "all", price: 120, oldPrice: 150, faria: 75, disc: "Grade A", score: 94, shelf: "7 Days", origin: "Hathazari Greenhouse", img: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=500&q=80" },
+      { id: 8, name: "Spicy Red Chili", bangla: "পাকা লাল মরিচ", cat: "all", price: 85, oldPrice: 110, faria: 50, disc: "Piquant", score: 97, shelf: "8 Days", origin: "Bogura Hub", img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=500&q=80" },
+      { id: 9, name: "Brocoli", bangla: "ব্রকলি", cat: "all", price: 52, oldPrice: 65, faria: 32, disc: "Organic", score: 90, shelf: "5 Days", origin: "Comilla Hub", img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=500&q=80" },
+      { id: 10, name: "Stawberry", bangla: "স্ট্রবেরি", cat: "roots", price: 48, oldPrice: 60, faria: 30, disc: "20% OFF", score: 93, shelf: "6 Days", origin: "Narsingdi Hub", img: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=500&q=80" },
+      { id: 11, name: "Fresh Cauliflower", bangla: "ফুলকপি", cat: "all", price: 35, oldPrice: 45, faria: 22, disc: "Peak Fresh", score: 95, shelf: "5 Days", origin: "Jessore Hub", img: "https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?auto=format&fit=crop&w=500&q=80" },
+      { id: 12, name: "Cabbage", bangla: "বাঁধাকপি", cat: "leafy", price: 60, oldPrice: 80, faria: 38, disc: "Grade A", score: 96, shelf: "9 Days", origin: "Rajshahi Hub", img: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=500&q=80" },
+      { id: 13, name: "Potato", bangla: "আলু", cat: "roots", price: 40, oldPrice: 55, faria: 25, disc: "Organic", score: 92, shelf: "7 Days", origin: "Hathazari Hub", img: "https://images.unsplash.com/photo-1590165482129-1b8b27698780?auto=format&fit=crop&w=500&q=80" },
+      { id: 14, name: "Ripe Papaya", bangla: "পাকা পেঁপে", cat: "roots", price: 25, oldPrice: 35, faria: 15, disc: "Fresh", score: 95, shelf: "10 Days", origin: "Chittagong Hill Tracts", img: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?auto=format&fit=crop&w=500&q=80" },
+      { id: 15, name: "Okra (Lady Finger)", bangla: "ঢ্যাঁড়শ", cat: "all", price: 42, oldPrice: 55, faria: 25, disc: "Tender", score: 91, shelf: "4 Days", origin: "Kushtia Hub", img: "https://images.unsplash.com/photo-1425543103986-22abb7d7e8d2?auto=format&fit=crop&w=500&q=80" }
+    ];
+
+    const TRANSLATIONS = {
+      en: {
+        navMarketplace: "Marketplace",
+        navScanner: "AI Quality Scan",
+        navHubs: "Hub Centers",
+        navHarvestDesk: "Harvest Desk",
+        navPriceBoard: "Price Board",
+        navBatchDispatch: "Batch Dispatch",
+        navFieldConditions: "Field Conditions",
+        authBtn: "Sign In",
+        heroTag: "Guaranteed Freshness Timestamps",
+        heroTitle: 'Bridging the Gap from <span class="text-brand-forest underline decoration-emerald-300 decoration-wavy decoration-2">Field to Fork</span>',
+        heroDesc: "Procure fresh, chemical-free vegetables directly from verified farmers. Our AI collection hubs inspect, grade, and timestamp every single batch with dynamic expiry and markdown savings.",
+        heroBtnShop: "Shop Available Harvest",
+        heroBtnScan: "Open Universal AI Scanner",
+        statCold: "Chilled Delivery Chain",
+        statChem: "Chemical Pesticides",
+        statBuyback: "Guaranteed Buyback",
+        btnAddToCart: "Add to Cart",
+        marqueeTitle: "Live Collection Centers Feed (15+ Varieties)",
+        marqueeSub: "Real-time inventory from Chattogram, Bogura & Rajshahi",
+        featTag: "Daily Direct Harvest",
+        featTitle: "Featured Market Picks",
+        featViewAll: "View All 15 Vegetables",
+        marketTag: "Direct Procurement",
+        marketTitle: "All Fresh Vegetables",
+        marketDesc: "Computer-vision verified moisture, organic certification, and dynamic expiry dates.",
+        filterAll: "All Vegetables (15)",
+        filterLeafy: "Leafy Greens",
+        filterRoots: "Roots & Gourds",
+        filterMarkdown: "Zero-Waste Markdown",
+        scanHeaderTag: "Universal Computer Vision Engine",
+        scanHeaderTitle: "Scan Any Produce: Fruit, Veggie or Gourd",
+        scanHeaderDesc: "Upload an image, trigger your camera feed, or pick any vegetable batch. Our convolutional neural network detects boundary texture, moisture degradation, and surface defects.",
+        labelProduceType: "Target Produce Type",
+        labelUploadPhoto: "Upload Photo / Capture",
+        labelHardware: "Device Hardware",
+        btnCamEnable: "Enable Live Camera",
+        btnCamDisable: "Stop Live Camera",
+        scanEngineNote: "Supported models: YOLOv8-Produce, Texture-CNN & Chlorophyll Index.",
+        btnRunInference: "Run Computer Vision Inference",
+        cardDetectedBatch: "Detected Batch",
+        cardFreshnessIndex: "Freshness Index",
+        cardDynamicShelf: "Dynamic Shelf Life",
+        cardChemicalTrace: "Chemical Trace",
+        hubsTag: "Physical Sourcing Network",
+        hubsTitle: "Offline Experience & Quality Centers",
+        hubsDesc: "Inspect produce before pickup, test computer vision spectrometers, or schedule contract drop-offs.",
+        cartTitle: "Your Fresh Cart",
+        cartSubtotal: "Subtotal",
+        cartTransit: "Cold-Chain Insulated Transit",
+        cartTotal: "Total Payable",
+        cartGateway: "Select Payment Gateway",
+        btnConfirmOrder: "Confirm Order & Dispatch",
+        footerTagline: "Direct farm procurement with guaranteed prices, certified weights, and cold-chain supply across Bangladesh.",
+        footerProdCats: "Produce Categories",
+        footerPortals: "Partner Portals",
+        footerPayments: "Payment Methods Supported"
+      },
+      bn: {
+        navMarketplace: "মার্কেটপ্লেস",
+        navScanner: "এআই কোয়ালিটি স্ক্যান",
+        navHubs: "হাব সেন্টারসমূহ",
+        navHarvestDesk: "ফসল ডেক্স",
+        navPriceBoard: "মূল্য তালিকা",
+        navBatchDispatch: "ব্যাচ ডেলিভারি",
+        navFieldConditions: "জমির অবস্থা",
+        authBtn: "লগইন",
+        heroTag: "সরাসরি মাঠ থেকে সতেজতার নিশ্চয়তা",
+        heroTitle: 'সরাসরি খেত থেকে <span class="text-brand-forest underline decoration-emerald-300 decoration-wavy decoration-2">আপনার খাবার টেবিলে</span>',
+        heroDesc: "যাচাইকৃত কৃষকদের কাছ থেকে বিষমুক্ত সতেজ শাকসবজি কিনুন। আমাদের এআই হাব প্রতিটি ব্যাচ পরিদর্শন করে নিশ্চিত মান ও সাশ্রয়ী মূল্য নির্ধারণ করে।",
+        heroBtnShop: "শাকসবজি কিনুন",
+        heroBtnScan: "এআই স্ক্যানার খুলুন",
+        statCold: "৪°সে. কোল্ড চেইন সাপ্লাই",
+        statChem: "কীটনাশকমুক্ত নিশ্চয়তা",
+        statBuyback: "১০০% নিশ্চিত বিক্রয়",
+        btnAddToCart: "কার্টে যোগ করুন",
+        marqueeTitle: "সরাসরি কালেকশন হাব ফিড (১৫+ জাতের সবজি)",
+        marqueeSub: "চট্টগ্রাম, বগুড়া ও রাজশাহীর তাজা সবজির লাইভ স্টক",
+        featTag: "প্রতিদিনের তাজা ফসল",
+        featTitle: "বিশেষ নির্বাচিত সবজি",
+        featViewAll: "সব ১৫টি শাকসবজি দেখুন",
+        marketTag: "সরাসরি সংগ্রহশালা",
+        marketTitle: "সকল টাটকা শাকসবজি",
+        marketDesc: "কম্পিউটার ভিশন যাচাইকৃত আর্দ্রতা, অর্গানিক সনদ ও সঠিক মেয়াদ নিশ্চিতকরণ।",
+        filterAll: "সকল সবজি (১৫)",
+        filterLeafy: "শাকপাতা",
+        filterRoots: "মূল ও লাউজাতীয়",
+        filterMarkdown: "জিরো-ওয়েস্ট মূল্যছাড়",
+        scanHeaderTag: "কম্পিউটার ভিশন কোয়ালিটি ইঞ্জিন",
+        scanHeaderTitle: "যেকোনো ফলমূল ও শাকসবজি স্ক্যান করুন",
+        scanHeaderDesc: "ছবি আপলোড করুন বা লাইভ ক্যামেরা ব্যবহার করুন। আমাদের এআই মডেল দ্রুত সতেজতা ও গুণমান মূল্যায়ন করে।",
+        labelProduceType: "সবজির ধরন নির্বাচন",
+        labelUploadPhoto: "ছবি আপলোড করুন",
+        labelHardware: "ক্যামেরা ডিভাইস",
+        btnCamEnable: "ক্যামেরা চালু করুন",
+        btnCamDisable: "ক্যামেরা বন্ধ করুন",
+        scanEngineNote: "সাপোর্টেড মডেল: YOLOv8-Produce, Texture-CNN ও ক্লোরোফিল সূচক।",
+        btnRunInference: "এআই বিশ্লেষণ শুরু করুন",
+        cardDetectedBatch: "শনাক্তকৃত ফসল",
+        cardFreshnessIndex: "সতেজতার সূচক",
+        cardDynamicShelf: "সংরক্ষণ মেয়াদ",
+        cardChemicalTrace: "রাসায়নিক উপাদান",
+        hubsTag: "সরাসরি হাব নেটওয়ার্ক",
+        hubsTitle: "অফলাইন এক্সপেরিয়েন্স ও কালেকশন সেন্টার",
+        hubsDesc: "পণ্য গ্রহণের পূর্বে নিজেই গুণমান যাচাই করুন এবং ডিজিটাল স্কেলে ওজন পরীক্ষা করুন।",
+        cartTitle: "আপনার শপিং ব্যাগ",
+        cartSubtotal: "উপমোট",
+        cartTransit: "কোল্ড-চেইন ডেলিভারি",
+        cartTotal: "সর্বমোট প্রদেয়",
+        cartGateway: "পেমেন্ট মাধ্যম বেছে নিন",
+        btnConfirmOrder: "অর্ডার নিশ্চিত করুন",
+        footerTagline: "ন্যায্য মূল্য, ডিজিটাল ওজন ও কোল্ড-চেইন সাপ্লাইসহ বাংলাদেশের সবচেয়ে আধুনিক কৃষি প্ল্যাটফর্ম।",
+        footerProdCats: "সবজির বিভাগ",
+        footerPortals: "পার্টনার পোর্টাল",
+        footerPayments: "গৃহীত পেমেন্ট মাধ্যম"
+      }
+    };
+
+    let activePage = 'home';
+    let activeCategory = 'all';
+    let currentAuthRole = 'buyer'; 
+    let currentLang = 'en';
+    let selectedPayGateway = 'bkash';
+    let chosenRegistrationRole = 'buyer';
+    let webcamStream = null;
+    let cart = [
+      { id: 1, name: "Red Vine Tomatoes", price: 38.00, qty: 2 },
+      { id: 5, name: "Farm Fresh Spinach", price: 10.90, qty: 1 }
+    ];
+
+    function toggleMobileNav() {
+      const drawer = document.getElementById('mobileNavDrawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function handleLogoClick() {
+      if (currentAuthRole === 'farmer') {
+        navigateTo('contracts');
+      } else {
+        navigateTo('home');
+      }
+    }
+
+    function handleProfileAuthClick() {
+      navigateTo('profile');
+    }
+
+    function navigateTo(pageId) {
+      activePage = pageId;
+      
+      const buyerPages = ['pageHome', 'pageMarketplace', 'pageScanner', 'pageHubs'];
+      const farmerPages = ['pageContracts', 'pageFarmerPrices', 'pageFarmerDispatch', 'pageFarmerIot'];
+      const commonPages = ['pageProfile'];
+
+      [...buyerPages, ...farmerPages, ...commonPages].forEach(p => {
+        const el = document.getElementById(p);
+        if (el) el.classList.add('hidden');
+      });
+
+      const buyerPortalContainer = document.getElementById('buyerPortalContainer');
+      if (currentAuthRole === 'buyer' && pageId !== 'profile') {
+        buyerPortalContainer.classList.remove('hidden');
+      } else {
+        buyerPortalContainer.classList.add('hidden');
+      }
+
+      const targetEl = document.getElementById(
+        pageId === 'home' ? 'pageHome' :
+        pageId === 'marketplace' ? 'pageMarketplace' :
+        pageId === 'scanner' ? 'pageScanner' :
+        pageId === 'hubs' ? 'pageHubs' :
+        pageId === 'contracts' ? 'pageContracts' :
+        pageId === 'farmer-prices' ? 'pageFarmerPrices' :
+        pageId === 'farmer-dispatch' ? 'pageFarmerDispatch' :
+        pageId === 'farmer-iot' ? 'pageFarmerIot' :
+        pageId === 'profile' ? 'pageProfile' : 'pageHome'
+      );
+
+      if (targetEl) targetEl.classList.remove('hidden');
+
+      if (pageId === 'marketplace') renderCatalog();
+      if (pageId === 'farmer-prices') renderFarmerPriceBoard();
+
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        if (btn.dataset.nav === pageId) {
+          btn.classList.add('text-brand-leaf', 'font-black');
+        } else {
+          btn.classList.remove('text-brand-leaf', 'font-black');
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderInfiniteMarquee() {
+      const track = document.getElementById('infiniteMarquee');
+      if (!track) return;
+      track.innerHTML = '';
+      const fullList = [...VEGETABLES, ...VEGETABLES];
+      fullList.forEach(veg => {
+        track.innerHTML += `
+          <div onclick="navigateTo('marketplace')" class="marquee-card-item bg-brand-canvas rounded-3xl p-3.5 sm:p-4 border border-emerald-100 shadow-sm flex items-center gap-3.5 hover:bg-white hover:border-brand-leaf hover:shadow-md transition-all cursor-pointer">
+            <img src="${veg.img}" alt="${veg.name}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover shrink-0 border border-emerald-100" />
+            <div class="flex-1 min-w-0">
+              <span class="text-[10px] font-black text-brand-leaf uppercase tracking-wider">${veg.disc}</span>
+              <h4 class="text-xs sm:text-sm font-bold text-gray-900 truncate mt-0.5">${veg.name}</h4>
+              <p class="text-xs sm:text-sm text-brand-forest font-black mt-0.5">BDT ${veg.price.toFixed(2)} • <span class="text-brand-leaf font-bold">${veg.score}% Fresh</span></p>
+            </div>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    function renderFeatured() {
+      const grid = document.getElementById('featuredGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      VEGETABLES.slice(0, 4).forEach(veg => {
+        grid.innerHTML += createProductCardHTML(veg);
+      });
+      lucide.createIcons();
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById('catalogGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      let filtered = VEGETABLES;
+      if (activeCategory === 'leafy') filtered = VEGETABLES.filter(v => v.cat === 'leafy');
+      if (activeCategory === 'roots') filtered = VEGETABLES.filter(v => v.cat === 'roots');
+      if (activeCategory === 'markdown') filtered = VEGETABLES.filter(v => v.disc.includes('OFF'));
+
+      filtered.forEach(veg => {
+        grid.innerHTML += createProductCardHTML(veg);
+      });
+      lucide.createIcons();
+    }
+
+    function createProductCardHTML(veg) {
+      return `
+        <div class="property__card bg-white rounded-3xl p-4 border border-emerald-50 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300 relative group flex flex-col justify-between">
+          <span class="absolute top-4 right-4 bg-brand-forest text-white text-xs font-black px-2.5 py-1 rounded-full z-10 shadow-sm">${veg.disc}</span>
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-3 bg-gray-50 relative">
+              <img src="${veg.img}" alt="${veg.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <span class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-lg">Batch #AG-${7720 + veg.id}</span>
+            </div>
+            <h3 class="font-extrabold text-base text-gray-900">${veg.name} (${veg.bangla})</h3>
+            <p class="text-xs text-brand-muted font-medium mb-2">${veg.origin}</p>
+            <div class="bg-brand-mint text-brand-forest text-xs font-bold px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 mb-2">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-brand-leaf"></i>
+              <span>AI Freshness: ${veg.score}%</span>
+            </div>
+            <p class="text-xs text-gray-500 font-medium">Estimated Shelf Life: <span class="font-bold text-gray-800">${veg.shelf}</span></p>
+          </div>
+          <div class="pt-4 mt-3 border-t border-gray-100 flex items-center justify-between">
+            <div>
+              <span class="text-lg font-black text-brand-forest">BDT ${veg.price.toFixed(2)}</span>
+              <span class="text-xs text-gray-400 line-through ml-1">${veg.oldPrice.toFixed(2)}</span>
+            </div>
+            <button onclick="addToCart('${veg.name}', ${veg.price})" class="w-10 h-10 rounded-xl bg-brand-mint hover:bg-brand-forest hover:text-white text-brand-forest flex items-center justify-center transition shadow-sm">
+              <i data-lucide="plus" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFarmerPriceBoard() {
+      const tbody = document.getElementById('farmerPriceTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      VEGETABLES.forEach(v => {
+        const liftPct = Math.round(((v.price - v.faria) / v.faria) * 100);
+        tbody.innerHTML += `
+          <tr class="hover:bg-emerald-50/40 transition">
+            <td class="py-3.5 px-6 flex items-center gap-3">
+              <img src="${v.img}" alt="${v.name}" class="w-10 h-10 rounded-xl object-cover border border-emerald-100" />
+              <div>
+                <p class="font-bold text-gray-900 text-xs">${v.name}</p>
+                <p class="text-[10px] text-gray-400 font-normal">${v.bangla} • Hub Source</p>
+              </div>
+            </td>
+            <td class="py-3.5 px-6">
+              <span class="text-brand-forest font-black text-sm">BDT ${v.price.toFixed(2)}</span>
+              <span class="text-[10px] text-gray-400">/ kg</span>
+            </td>
+            <td class="py-3.5 px-6 text-gray-400 line-through text-xs">
+              BDT ${v.faria.toFixed(2)} / kg
+            </td>
+            <td class="py-3.5 px-6">
+              <span class="bg-brand-mint text-brand-forest text-[11px] font-black px-2.5 py-1 rounded-lg">
+                +${liftPct}% Net Higher
+              </span>
+            </td>
+            <td class="py-3.5 px-6 text-right">
+              <button onclick="prefillDispatch('${v.name}')" class="px-3.5 py-1.5 bg-brand-forest hover:bg-emerald-900 text-white font-bold text-[11px] rounded-xl transition shadow-xs">
+                Dispatch Batch
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    function prefillDispatch(cropName) {
+      navigateTo('farmer-dispatch');
+      const select = document.getElementById('dispatchCropSelect');
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].text.includes(cropName.split(' ')[0])) {
+          select.selectedIndex = i;
+          break;
+        }
+      }
+    }
+
+    function filterProduce(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.market-tab').forEach(b => {
+        b.className = 'market-tab px-3.5 py-2 rounded-xl text-gray-600 hover:text-brand-forest transition';
+      });
+      if (cat === 'all') document.getElementById('tabAll').className = 'market-tab px-3.5 py-2 rounded-xl bg-brand-forest text-white transition';
+      if (cat === 'leafy') document.getElementById('tabLeafy').className = 'market-tab px-3.5 py-2 rounded-xl bg-brand-forest text-white transition';
+      if (cat === 'roots') document.getElementById('tabRoots').className = 'market-tab px-3.5 py-2 rounded-xl bg-brand-forest text-white transition';
+      if (cat === 'markdown') document.getElementById('tabMarkdown').className = 'market-tab px-3.5 py-2 rounded-xl bg-brand-forest text-white transition flex items-center gap-1.5';
+      renderCatalog();
+    }
+
+    // --- UNIVERSAL AI SCANNER ---
+    const GENERIC_PRESETS = {
+      tomato: { name: "Red Vine Tomato", score: 94, shelf: "5 Days", img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=1000&q=80", moisture: "89%", defect: "0.01%" },
+      karela: { name: "Bitter Gourd (Karela)", score: 93, shelf: "6 Days", img: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=1000&q=80", moisture: "84%", defect: "0.02%" },
+      lettuce: { name: "Fresh Crisp Lettuce", score: 92, shelf: "5 Days", img: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=1000&q=80", moisture: "94%", defect: "0.00%" },
+      cucumber: { name: "Green Cucumber", score: 88, shelf: "4 Days", img: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=1000&q=80", moisture: "91%", defect: "0.03%" },
+      carrot: { name: "Organic Sweet Carrots", score: 97, shelf: "7 Days", img: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=1000&q=80", moisture: "86%", defect: "0.00%" },
+      potato: { name: "Diamant Potato", score: 98, shelf: "22 Days", img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=1000&q=80", moisture: "78%", defect: "0.01%" },
+      capsicum: { name: "Green Capsicum", score: 94, shelf: "7 Days", img: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=1000&q=80", moisture: "87%", defect: "0.01%" },
+      spinach: { name: "Organic Spinach", score: 95, shelf: "5 Days", img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=1000&q=80", moisture: "95%", defect: "0.00%" },
+      eggplant: { name: "Purple Eggplant", score: 91, shelf: "5 Days", img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=1000&q=80", moisture: "88%", defect: "0.02%" }
+    };
+
+    function onProduceSelectChange(val) {
+      if (val === 'custom') {
+        document.getElementById('cvDetectTag').innerText = "Class: Auto-Detect [Evaluating]";
+        return;
+      }
+      const data = GENERIC_PRESETS[val];
+      if (data) {
+        document.getElementById('scannerViewportImg').src = data.img;
+        document.getElementById('cvDetectTag').innerText = `Class: ${data.name} [97.2%]`;
+        document.getElementById('cvMoistureTag').innerText = `Moisture: ${data.moisture}`;
+        document.getElementById('cvDefectTag').innerText = `Defect: ${data.defect}`;
+        document.getElementById('cvProduceNameDisplay').innerText = data.name;
+        document.getElementById('cvScoreDisplay').innerText = `${data.score}%`;
+        document.getElementById('cvShelfDisplay').innerText = data.shelf;
+      }
+    }
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const imgEl = document.getElementById('scannerViewportImg');
+          imgEl.src = evt.target.result;
+          imgEl.classList.remove('hidden');
+          document.getElementById('webcamVideoElement').classList.add('hidden');
+          stopWebcam();
+          document.getElementById('cvDetectTag').innerText = `Class: Custom Intake [Analyzing...]`;
+          triggerUniversalAnalysis();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function toggleWebcamStream() {
+      const video = document.getElementById('webcamVideoElement');
+      const img = document.getElementById('scannerViewportImg');
+      const btnText = document.getElementById('webcamBtnText');
+
+      if (webcamStream) {
+        stopWebcam();
+        video.classList.add('hidden');
+        img.classList.remove('hidden');
+        btnText.innerText = currentLang === 'bn' ? "ক্যামেরা চালু করুন" : "Enable Live Camera";
+      } else {
+        try {
+          webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = webcamStream;
+          video.classList.remove('hidden');
+          img.classList.add('hidden');
+          btnText.innerText = currentLang === 'bn' ? "ক্যামেরা বন্ধ করুন" : "Stop Live Camera";
+        } catch (err) {
+          alert('Hardware camera access unavailable.');
+        }
+      }
+    }
+
+    function stopWebcam() {
+      if (webcamStream) {
+        webcamStream.getTracks().forEach(track => track.stop());
+        webcamStream = null;
+      }
+    }
+
+    function triggerUniversalAnalysis() {
+      const btn = document.getElementById('runUniversalScanBtn');
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Scanning...</span>`;
+      lucide.createIcons();
+
+      setTimeout(() => {
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Run Computer Vision Inference</span>`;
+        lucide.createIcons();
+        const randomScore = Math.floor(91 + Math.random() * 8);
+        const randomDays = Math.floor(4 + Math.random() * 5);
+        const selectedVal = document.getElementById('universalProduceSelect').value;
+        const currentName = selectedVal !== 'custom' && GENERIC_PRESETS[selectedVal] ? GENERIC_PRESETS[selectedVal].name : "Batch Verified Produce";
+
+        document.getElementById('cvDetectTag').innerText = `Class: ${currentName} [98.6%]`;
+        document.getElementById('cvProduceNameDisplay').innerText = currentName;
+        document.getElementById('cvScoreDisplay').innerText = `${randomScore}%`;
+        document.getElementById('cvShelfDisplay').innerText = `${randomDays} Days`;
+        document.getElementById('cvMoistureTag').innerText = `Moisture: ${Math.floor(82 + Math.random() * 12)}%`;
+        alert(`AI Inspection Complete: ${currentName} verified with ${randomScore}% freshness index.`);
+      }, 1100);
+    }
+
+    // --- CART LOGIC ---
+    function addToCart(name, price) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ id: Date.now(), name, price, qty: 1 });
+      }
+      updateCartUI();
+      alert(`✓ ${name} added to cart!`);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cartHeaderBadge');
+      const list = document.getElementById('cartItemsList');
+      const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+      badge.innerText = totalItems;
+      list.innerHTML = '';
+      let subtotal = 0;
+
+      if (cart.length === 0) {
+        list.innerHTML = `<div class="py-12 text-center text-gray-400 font-semibold text-xs">Your basket is currently empty.</div>`;
+      } else {
+        cart.forEach((item, index) => {
+          const itemTotal = item.price * item.qty;
+          subtotal += itemTotal;
+          list.innerHTML += `
+            <div class="bg-brand-canvas p-3 rounded-2xl border border-emerald-100 flex items-center justify-between text-xs">
+              <div>
+                <p class="font-bold text-gray-900">${item.name}</p>
+                <p class="text-gray-400">BDT ${item.price.toFixed(2)} × ${item.qty}</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-black text-brand-forest">BDT ${itemTotal.toFixed(2)}</span>
+                <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 font-bold text-base leading-none">×</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById('drawerSubtotal').innerText = 'BDT ' + subtotal.toFixed(2);
+      document.getElementById('drawerTotal').innerText = 'BDT ' + subtotal.toFixed(2);
+    }
+
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      const content = document.getElementById('cartDrawerContent');
+      const isOpen = !drawer.classList.contains('pointer-events-none');
+
+      if (isOpen) {
+        drawer.classList.add('opacity-0', 'pointer-events-none');
+        content.classList.add('translate-x-full');
+      } else {
+        updateCartUI();
+        drawer.classList.remove('opacity-0', 'pointer-events-none');
+        content.classList.remove('translate-x-full');
+      }
+    }
+
+    function selectPayMethod(method) {
+      selectedPayGateway = method;
+      ['bkash', 'nagad', 'card'].forEach(m => {
+        const btn = document.getElementById('pay' + m.charAt(0).toUpperCase() + m.slice(1));
+        if (m === method) {
+          btn.className = 'py-2 px-1 rounded-xl bg-pink-50 border-2 border-pink-500 flex flex-col items-center justify-center gap-1 transition shadow-sm hover:scale-105';
+        } else {
+          btn.className = 'py-2 px-1 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center gap-1 transition hover:scale-105';
+        }
+      });
+    }
+
+    function executeCheckout() {
+      if (cart.length === 0) return alert('Your cart is empty!');
+      const pin = prompt(`Agro Bridge ${selectedPayGateway.toUpperCase()} Gateway\nEnter 5-digit PIN to confirm:`, '12345');
+      if (pin) {
+        alert('Order Placed Successfully! Cold-Chain delivery vehicle dispatched from Agrabad Hub.');
+        cart = [];
+        updateCartUI();
+        toggleCartDrawer();
+      }
+    }
+
+    // --- AUTHENTICATION & AUTO-SWITCH ---
+    function openAuthModal() {
+      const modal = document.getElementById('authModal');
+      const content = document.getElementById('authModalContent');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('authModal');
+      const content = document.getElementById('authModalContent');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+    }
+
+    function openRoleSelectionModal() {
+      closeAuthModal();
+      const modal = document.getElementById('roleSelectionModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeRoleSelectionModal() {
+      const modal = document.getElementById('roleSelectionModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function selectRegistrationRole(role) {
+      chosenRegistrationRole = role;
+      closeRoleSelectionModal();
+      const regModal = document.getElementById('registrationFormModal');
+      const regContent = document.getElementById('regModalContent');
+      const badge = document.getElementById('regRoleBadge');
+      
+      const roleMap = {
+        'buyer': 'Retail Buyer Account',
+        'farmer': 'Contract Farmer Partner',
+        'inspector': 'Hub Staff Console',
+        'admin': 'System Administrator'
+      };
+      badge.innerText = roleMap[role];
+      regModal.classList.remove('opacity-0', 'pointer-events-none');
+      regContent.classList.remove('scale-95');
+      regContent.classList.add('scale-100');
+    }
+
+    function closeRegistrationFormModal() {
+      const regModal = document.getElementById('registrationFormModal');
+      const regContent = document.getElementById('regModalContent');
+      regModal.classList.add('opacity-0', 'pointer-events-none');
+      regContent.classList.remove('scale-100');
+      regContent.classList.add('scale-95');
+    }
+
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      alert(`Account Created Successfully for ${name} as [${chosenRegistrationRole.toUpperCase()}].`);
+      closeRegistrationFormModal();
+      applyRolePermissions(chosenRegistrationRole);
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const contact = document.getElementById('authEmailInput').value;
+      alert(`Authenticated successfully as [${currentAuthRole.toUpperCase()}]: ${contact}`);
+      closeAuthModal();
+      applyRolePermissions(currentAuthRole);
+    }
+
+    // --- INSTANT AUTO-SWITCH PERMISSIONS ---
+    function applyRolePermissions(role) {
+      currentAuthRole = role;
+
+      const mobileRoleSelect = document.getElementById('mobileRoleSelect');
+      const modalSelect = document.getElementById('testUserRoleSelect');
+      const roleIndLabel = document.getElementById('roleIndicatorLabel');
+      
+      if (mobileRoleSelect) mobileRoleSelect.value = role;
+      if (modalSelect) modalSelect.value = role;
+      if (roleIndLabel) roleIndLabel.innerText = role.toUpperCase();
+
+      const roleContactMap = {
+        'buyer': 'buyer@agrobridge.bd',
+        'farmer': 'farmer.karim@agrobridge.bd',
+        'inspector': 'hub.inspector@agrobridge.bd',
+        'admin': 'lead.admin@agrobridge.bd'
+      };
+      const emailInput = document.getElementById('authEmailInput');
+      if (emailInput) emailInput.value = roleContactMap[role];
+
+      // Update Profile Page Data
+      const profileRoleMap = {
+        'buyer': 'Retail Buyer',
+        'farmer': 'Contract Farmer',
+        'inspector': 'Hub Staff',
+        'admin': 'System Administrator'
+      };
+      const profileNameMap = {
+        'buyer': 'Tanvir Ahmed',
+        'farmer': 'Abdul Karim (Contract Farmer)',
+        'inspector': 'Rafiqul Islam (Hub Staff)',
+        'admin': 'Administrator Lead'
+      };
+      const nameEl = document.getElementById('profileNameDisplay');
+      const roleBadgeEl = document.getElementById('profileRoleBadgeDisplay');
+      const emailEl = document.getElementById('profileEmailDisplay');
+      if (nameEl) nameEl.innerText = profileNameMap[role];
+      if (roleBadgeEl) roleBadgeEl.innerText = profileRoleMap[role];
+      if (emailEl) emailEl.innerText = roleContactMap[role];
+
+      const partnerRoleLabel = document.getElementById('partnerRoleLabel');
+      const cartBtn = document.getElementById('cartHeaderBtn');
+      const buyerPortalContainer = document.getElementById('buyerPortalContainer');
+
+      const buyerLinks = document.querySelectorAll('.buyer-link');
+      const farmerLinks = document.querySelectorAll('.farmer-link');
+      const mobileBuyerLinks = document.querySelectorAll('.mobile-buyer-link');
+      const mobileFarmerLinks = document.querySelectorAll('.mobile-farmer-link');
+
+      if (role === 'buyer') {
+        buyerPortalContainer.classList.remove('hidden');
+        buyerLinks.forEach(l => l.classList.remove('hidden'));
+        farmerLinks.forEach(l => l.classList.add('hidden'));
+        mobileBuyerLinks.forEach(l => l.classList.remove('hidden'));
+        mobileFarmerLinks.forEach(l => l.classList.add('hidden'));
+        cartBtn.classList.remove('hidden');
+
+        navigateTo('home');
+      } else if (role === 'farmer') {
+        buyerPortalContainer.classList.add('hidden');
+        buyerLinks.forEach(l => l.classList.add('hidden'));
+        farmerLinks.forEach(l => {
+          l.classList.remove('hidden');
+          l.classList.add('flex');
+        });
+        mobileBuyerLinks.forEach(l => l.classList.add('hidden'));
+        mobileFarmerLinks.forEach(l => l.classList.remove('hidden'));
+        cartBtn.classList.add('hidden');
+
+        if (partnerRoleLabel) partnerRoleLabel.innerText = "Contract Farmer Terminal";
+
+        updateRoleView('farmer');
+        navigateTo('contracts');
+      } else {
+        buyerPortalContainer.classList.add('hidden');
+        buyerLinks.forEach(l => l.classList.add('hidden'));
+        farmerLinks.forEach(l => l.classList.add('hidden'));
+        mobileBuyerLinks.forEach(l => l.classList.add('hidden'));
+        mobileFarmerLinks.forEach(l => l.classList.remove('hidden'));
+        cartBtn.classList.add('hidden');
+
+        updateRoleView(role);
+
+        if (role === 'inspector') {
+          if (partnerRoleLabel) partnerRoleLabel.innerText = "Hub Staff Inspection Console";
+        } else if (role === 'admin') {
+          if (partnerRoleLabel) partnerRoleLabel.innerText = "Admin Supply Chain Control";
+        }
+
+        navigateTo('contracts');
+      }
+      lucide.createIcons();
+    }
+
+    function updateRoleView(role) {
+      const container = document.getElementById('roleContentContainer');
+      const heading = document.getElementById('contractHeading');
+      const subheading = document.getElementById('contractSubheading');
+
+      if (role === 'farmer') {
+        heading.innerText = "Contract Farming & Guaranteed Rates";
+        subheading.innerText = "Manage seasonal guaranteed buyback contracts, schedule regional hub drop-offs, and monitor payouts.";
+        container.innerHTML = `
+          <div class="bg-brand-forest text-white p-6 rounded-3xl shadow-soft space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs text-emerald-200 font-semibold">Active Buyback Earnings</p>
+                <h4 class="text-3xl font-black mt-1">BDT 48,250.00</h4>
+              </div>
+              <span class="bg-white/20 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">Farmer Verified</span>
+            </div>
+            <p class="text-xs text-emerald-100">12 Harvest batches delivered this month with 0% middleman deductions.</p>
+            <button onclick="simulatePayout()" class="w-full py-3 bg-white text-brand-forest font-black text-xs rounded-xl shadow hover:bg-emerald-50 transition">
+              Instant Payout (bKash/Nagad)
+            </button>
+          </div>
+
+          <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b">
+              <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">Today's Guaranteed Price vs. Middleman (Faria)</h4>
+              <button onclick="navigateTo('farmer-prices')" class="text-xs font-bold text-brand-leaf hover:underline flex items-center gap-1">
+                <span>View Full 15-Crop Board</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs min-w-[500px]">
+                <thead>
+                  <tr class="border-b text-gray-400 font-semibold">
+                    <th class="pb-2">Crop Name</th>
+                    <th class="pb-2">Agro Bridge Guaranteed</th>
+                    <th class="pb-2">Local Middleman</th>
+                    <th class="pb-2">Farmer Net Advantage</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 font-bold">
+                  <tr>
+                    <td class="py-2.5 text-gray-900">Tomatoes</td>
+                    <td class="py-2.5 text-brand-forest">BDT 38.00 / kg</td>
+                    <td class="py-2.5 text-gray-400 line-through">BDT 24.00</td>
+                    <td class="py-2.5 text-brand-leaf">+58.3% Higher</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 text-gray-900">Strawberry(স্ট্রবেরি)</td>
+                    <td class="py-2.5 text-brand-forest">BDT 48.00 / kg</td>
+                    <td class="py-2.5 text-gray-400 line-through">BDT 32.00</td>
+                    <td class="py-2.5 text-brand-leaf">+50.0% Higher</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 text-gray-900">Diamant Potatoes</td>
+                    <td class="py-2.5 text-brand-forest">BDT 32.00 / kg</td>
+                    <td class="py-2.5 text-gray-400 line-through">BDT 21.00</td>
+                    <td class="py-2.5 text-brand-leaf">+52.4% Higher</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      } else if (role === 'inspector') {
+        heading.innerText = "Hub Intake & Computer Vision Grading";
+        subheading.innerText = "Real-time intake monitoring, automated conveyor batch logging, and thermal label generation.";
+        container.innerHTML = `
+          <div class="bg-brand-forest text-white p-6 rounded-3xl shadow-soft space-y-4">
+            <h4 class="text-lg font-bold">Conveyor Intake Scanner</h4>
+            <p class="text-xs text-emerald-200">Lane 1 (Agrabad Hub) is running auto-classification.</p>
+            <div class="p-3 bg-white/10 rounded-2xl text-xs space-y-1 font-mono">
+              <p>Active Batch: #AG-7729</p>
+              <p>Throughput: 1.4 Tons/hr</p>
+              <p>Rejection Rate: 0.0%</p>
+            </div>
+            <button onclick="alert('Thermal label printed for Crate Bay C-04')" class="w-full py-3 bg-brand-mint text-brand-forest font-black text-xs rounded-xl shadow hover:bg-emerald-100 transition">
+              Print Thermal QR Label
+            </button>
+          </div>
+
+          <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft space-y-3">
+            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">Today's Inspection Queue</h4>
+            <div class="divide-y divide-gray-100 text-xs font-bold">
+              <div class="py-3 flex justify-between items-center">
+                <div>
+                  <p class="text-gray-900">Batch #AG-7728 • Sweet Carrots (350 kg)</p>
+                  <p class="text-[10px] text-gray-400 font-normal">Farmer: Mokbul Hossain • Bogura Hub</p>
+                </div>
+                <span class="bg-brand-mint text-brand-forest px-2.5 py-1 rounded-lg text-[10px]">VERIFIED GRADE A</span>
+              </div>
+              <div class="py-3 flex justify-between items-center">
+                <div>
+                  <p class="text-gray-900">Batch #AG-7731 • Green Cucumbers (500 kg)</p>
+                  <p class="text-[10px] text-gray-400 font-normal">Farmer: Abdul Karim • Hathazari Hub</p>
+                </div>
+                <span class="bg-brand-mint text-brand-forest px-2.5 py-1 rounded-lg text-[10px]">VERIFIED GRADE A</span>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (role === 'admin') {
+        heading.innerText = "Supply Chain & Pricing Command";
+        subheading.innerText = "Oversee district wholesale price floors, export container clearances, and regional collection logistics.";
+        container.innerHTML = `
+          <div class="bg-brand-forest text-white p-6 rounded-3xl shadow-soft space-y-4">
+            <h4 class="text-lg font-bold">National Logistics State</h4>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="bg-white/10 p-2.5 rounded-xl">
+                <p class="text-[10px] text-emerald-200">Reefer Vans</p>
+                <p class="text-base font-black">18 In-Transit</p>
+              </div>
+              <div class="bg-white/10 p-2.5 rounded-xl">
+                <p class="text-[10px] text-emerald-200">Avg Cold Temp</p>
+                <p class="text-base font-black">4.1°C Active</p>
+              </div>
+            </div>
+            <button onclick="alert('Export Manifest generated as PDF for Middle East Shipments.')" class="w-full py-3 bg-white text-brand-forest font-black text-xs rounded-xl shadow hover:bg-emerald-50 transition">
+              Download Export Clearance
+            </button>
+          </div>
+
+          <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-emerald-100 shadow-soft space-y-3">
+            <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider">Dynamic Markdown Rules Manager</h4>
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+                <span class="font-bold text-gray-800">48-Hour Markdown Trigger (-20%)</span>
+                <span class="font-extrabold text-brand-forest bg-brand-mint px-2 py-0.5 rounded">ENABLED</span>
+              </div>
+              <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+                <span class="font-bold text-gray-800">24-Hour Zero-Waste Clearance (-38%)</span>
+                <span class="font-extrabold text-brand-forest bg-brand-mint px-2 py-0.5 rounded">ENABLED</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    function handleFarmerDispatchSubmit(e) {
+      e.preventDefault();
+      const crop = document.getElementById('dispatchCropSelect').value;
+      const weight = document.getElementById('dispatchWeightInput').value;
+      const token = '#TK-' + Math.floor(1000 + Math.random() * 9000) + '-CHT';
+
+      document.getElementById('tokenCodeDisplay').innerText = token;
+      document.getElementById('generatedTokenCard').classList.remove('hidden');
+      alert(`Dispatch Scheduled! Harvest Token ${token} issued for ${weight} kg of ${crop}.`);
+      lucide.createIcons();
+    }
+
+    function simulatePayout() {
+      alert('Simulated Payout: BDT 48,250.00 transferred to Farmer bKash Wallet (01712-XXXXXX). Transaction ID: #TX-9941.');
+    }
+
+    // --- WORKING EN / BN TRANSLATION ENGINE ---
+    function setLanguage(lang) {
+      currentLang = lang;
+      const mobEn = document.getElementById('mobLangEn');
+      const mobBn = document.getElementById('mobLangBn');
+      if (mobEn && mobBn) {
+        mobEn.className = lang === 'en' ? 'py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl transition' : 'py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl transition';
+        mobBn.className = lang === 'bn' ? 'py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl transition' : 'py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl transition';
+      }
+
+      const dict = TRANSLATIONS[lang];
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.dataset.key;
+        if (dict[key]) {
+          el.innerHTML = dict[key];
+        }
+      });
+      lucide.createIcons();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderInfiniteMarquee();
+      renderFeatured();
+      updateCartUI();
+      applyRolePermissions('buyer');
+
+      const scrollRevealOption = { distance: "50px", origin: "bottom", duration: 1000 };
+      ScrollReveal().reveal(".header__container h1", { ...scrollRevealOption });
+      ScrollReveal().reveal(".header__content .section__description", { ...scrollRevealOption, delay: 250 });
+      ScrollReveal().reveal(".header__btns", { ...scrollRevealOption, delay: 500 });
+      ScrollReveal().reveal(".property__card", { ...scrollRevealOption, interval: 150 });
+    });
+  </script>
+</body>
+</html>
