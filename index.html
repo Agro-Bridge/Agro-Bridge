@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Agro Bridge BD - Smart Farm-to-Fork Agricultural Marketplace</title>
 
   <!-- Tailwind CSS via CDN -->
@@ -50,10 +50,12 @@
   </script>
 
   <style>
-    body {
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
       background-color: #F4F8F5;
       font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
-      overflow-x: hidden;
     }
 
     @keyframes scrollTicker {
@@ -69,7 +71,6 @@
       animation-play-state: paused;
     }
 
-    /* Fixed marquee responsiveness and card sizing */
     .marquee-card-item {
       flex: 0 0 auto !important;
       width: 280px !important;
@@ -114,7 +115,7 @@
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col justify-between text-brand-charcoal antialiased">
+<body class="min-h-screen flex flex-col justify-between text-brand-charcoal antialiased relative">
 
   <!-- ================= TOP STICKY GLOBAL HEADER ================= -->
   <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-emerald-100/80 shadow-sm transition-all duration-300">
@@ -139,56 +140,85 @@
         </div>
       </template>
 
-      <!-- DYNAMIC DESKTOP NAVIGATION -->
+      <!-- DYNAMIC DESKTOP NAVIGATION (ROLE-FILTERED) -->
       <nav id="desktopNavLinks" class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-gray-700">
-        <!-- BUYER LINKS -->
-        <button onclick="navigateTo('marketplace')" class="nav-link buyer-link hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="marketplace" data-key="navMarketplace">
+        <!-- Consumer Views (Visible only to Retail Buyer) -->
+        <button onclick="navigateTo('marketplace')" class="nav-link buyer-nav-item hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="marketplace" data-key="navMarketplace">
           <i data-lucide="store" class="w-4 h-4 text-brand-leaf"></i> <span>Marketplace</span>
         </button>
-        <button onclick="navigateTo('scanner')" class="nav-link buyer-link hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="scanner" data-key="navScanner">
+        <button onclick="navigateTo('scanner')" class="nav-link buyer-nav-item hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="scanner" data-key="navScanner">
           <i data-lucide="scan-line" class="w-4 h-4 text-brand-leaf"></i> <span>AI Quality Scan</span>
         </button>
-        <button onclick="navigateTo('hubs')" class="nav-link buyer-link hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="hubs" data-key="navHubs">
+        <button onclick="navigateTo('hubs')" class="nav-link buyer-nav-item hover:text-brand-leaf transition-colors flex items-center gap-1.5" data-nav="hubs" data-key="navHubs">
           <i data-lucide="map-pin" class="w-4 h-4 text-brand-leaf"></i> <span>Hub Centers</span>
         </button>
 
-        <!-- FARMER EXCLUSIVE LINKS -->
-        <button onclick="navigateTo('contracts')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="contracts" data-key="navHarvestDesk">
+        <!-- Farmer Workspaces (Visible only to Contract Farmer) -->
+        <button onclick="navigateTo('contracts')" class="nav-link farmer-nav-item hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="contracts" data-key="navHarvestDesk">
           <i data-lucide="wallet" class="w-4 h-4 text-brand-leaf"></i> <span>Harvest Desk</span>
         </button>
-        <button onclick="navigateTo('farmer-prices')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-prices" data-key="navPriceBoard">
+        <button onclick="navigateTo('farmer-prices')" class="nav-link farmer-nav-item hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-prices" data-key="navPriceBoard">
           <i data-lucide="trending-up" class="w-4 h-4 text-brand-leaf"></i> <span>Price Board</span>
         </button>
-        <button onclick="navigateTo('farmer-dispatch')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-dispatch" data-key="navBatchDispatch">
+        <button onclick="navigateTo('farmer-dispatch')" class="nav-link farmer-nav-item hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-dispatch" data-key="navBatchDispatch">
           <i data-lucide="truck" class="w-4 h-4 text-brand-leaf"></i> <span>Batch Dispatch</span>
         </button>
-        <button onclick="navigateTo('farmer-iot')" class="nav-link farmer-link hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-iot" data-key="navFieldConditions">
+        <button onclick="navigateTo('farmer-iot')" class="nav-link farmer-nav-item hover:text-brand-leaf transition-colors items-center gap-1.5 hidden" data-nav="farmer-iot" data-key="navFieldConditions">
           <i data-lucide="activity" class="w-4 h-4 text-brand-leaf"></i> <span>Field Conditions</span>
         </button>
       </nav>
 
       <!-- Global Actions -->
-      <div class="flex items-center gap-1.5 sm:gap-2.5">
+      <div class="flex items-center gap-2 sm:gap-2.5">
         
-        <!-- Non-interactive Role Indicator (Dropdown removed per request) -->
+        <!-- Non-interactive Role Indicator -->
         <div class="hidden md:flex items-center gap-1.5 bg-brand-mint border border-emerald-200/90 px-3 py-1.5 rounded-xl shadow-xs">
           <span class="w-2 h-2 rounded-full bg-brand-leaf animate-pulse"></span>
           <span class="text-[9px] uppercase font-bold text-gray-400" data-key="roleTag">ROLE:</span>
           <span id="roleIndicatorLabel" class="text-xs font-black text-brand-forest uppercase">RETAIL BUYER</span>
         </div>
 
-        <!-- Cart Quick Drawer Trigger (Hidden for Farmer) -->
+        <!-- Cart Quick Drawer Trigger (Hidden for farmers) -->
         <button id="cartHeaderBtn" onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-white border border-emerald-100 text-brand-forest hover:bg-brand-canvas transition hover:scale-105 shrink-0">
           <i data-lucide="shopping-bag" class="w-4 h-4"></i>
           <span id="cartHeaderBadge" class="absolute -top-1.5 -right-1.5 bg-brand-alertRed text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">2</span>
         </button>
 
-        <!-- Profile Icon (Acts as Sign-In trigger or profile navigation) -->
-        <button onclick="handleProfileAuthClick()" title="User Profile" class="p-2.5 rounded-xl bg-brand-leaf text-white hover:bg-brand-forest transition shadow-md shadow-brand-leaf/20 hover:scale-105 shrink-0 flex items-center justify-center">
-          <i data-lucide="user" class="w-4 h-4"></i>
-        </button>
+        <!-- Profile Action with Dropdown -->
+        <div class="relative">
+          <button onclick="toggleProfileDropdown()" title="Profile & Account" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-brand-leaf text-white hover:bg-brand-forest transition shadow-md shadow-brand-leaf/20 hover:scale-105 shrink-0 flex items-center gap-1.5">
+            <i data-lucide="user" class="w-4 h-4"></i>
+            <span id="headerProfileLabel" class="hidden sm:inline text-xs font-bold">Tanvir</span>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 opacity-70"></i>
+          </button>
 
-        <!-- Mobile Menu Hamburger Button -->
+          <!-- Desktop Popover -->
+          <div id="profilePopoverMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-emerald-100 py-3 hidden z-50">
+            <div class="px-4 pb-3 border-b border-gray-100">
+              <p id="popoverName" class="text-xs font-black text-gray-900 truncate">Tanvir Ahmed</p>
+              <p id="popoverEmail" class="text-[10px] text-gray-500 font-mono truncate">buyer@agrobridge.bd</p>
+              <span id="popoverRole" class="inline-block mt-1 text-[9px] font-black bg-brand-mint text-brand-forest px-2 py-0.5 rounded-md uppercase">Retail Buyer</span>
+            </div>
+            <div class="py-1 text-xs font-semibold text-gray-700">
+              <button onclick="navigateTo('profile'); toggleProfileDropdown();" class="w-full px-4 py-2 text-left hover:bg-emerald-50 hover:text-brand-forest flex items-center gap-2">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-leaf"></i>
+                <span>Account Dashboard</span>
+              </button>
+              <button onclick="openAuthModal(); toggleProfileDropdown();" class="w-full px-4 py-2 text-left hover:bg-emerald-50 hover:text-brand-forest flex items-center gap-2">
+                <i data-lucide="repeat" class="w-4 h-4 text-brand-leaf"></i>
+                <span>Switch Role / Login</span>
+              </button>
+            </div>
+            <div class="pt-1 border-t border-gray-100">
+              <button onclick="toggleUserAuthStatus(); toggleProfileDropdown();" id="popoverAuthAction" class="w-full px-4 py-2 text-left text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Hamburger Trigger Button -->
         <button onclick="toggleMobileNav()" aria-label="Open Navigation Menu" class="lg:hidden p-2 rounded-xl bg-gray-100 text-gray-700 hover:text-brand-forest transition shrink-0">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -196,68 +226,104 @@
 
     </div>
 
-    <!-- FULL SCREEN MOBILE OVERLAY DRAWER (WITH LANGUAGE & PROFILE EMBEDDED) -->
-    <div id="mobileNavDrawer" class="fixed inset-0 z-50 bg-brand-navDark text-white p-6 flex flex-col justify-between hidden transition-opacity duration-300 overflow-y-auto">
-      <div>
-        <div class="flex items-center justify-between pb-6 border-b border-gray-800">
-          <button onclick="toggleMobileNav()" class="text-gray-300 hover:text-white p-1">
-            <i data-lucide="x" class="w-7 h-7"></i>
-          </button>
+    <!-- ================= FIXED & FULLY SCROLLABLE MOBILE DRAWER ================= -->
+    <div id="mobileNavDrawer" class="fixed inset-0 h-screen w-screen bg-[#0D1527] text-white z-[999] p-6 hidden flex-col justify-between overflow-y-auto">
+      <div class="space-y-6">
+        <!-- Top bar inside Drawer -->
+        <div class="flex items-center justify-between pb-4 border-b border-gray-800">
           <div class="flex items-center gap-2">
             <span class="text-xl font-black tracking-tight text-white">Agro Bridge</span>
             <span class="text-[9px] font-black bg-brand-leaf text-white px-2 py-0.5 rounded-full uppercase">BD</span>
           </div>
-          <button onclick="navigateTo('profile'); toggleMobileNav();" class="text-emerald-400 p-1">
-            <i data-lucide="user" class="w-6 h-6"></i>
+          <button onclick="toggleMobileNav()" class="text-gray-300 hover:text-white p-2 rounded-xl bg-gray-800">
+            <i data-lucide="x" class="w-6 h-6"></i>
           </button>
         </div>
 
-        <!-- Role Selector inside mobile menu -->
-        <div class="py-4 border-b border-gray-800 space-y-3">
-          <div>
-            <label class="block text-[11px] font-bold text-gray-400 mb-1 uppercase tracking-wider">Active Ecosystem Role</label>
-            <select id="mobileRoleSelect" onchange="applyRolePermissions(this.value);" class="w-full py-2.5 px-3 bg-gray-800 text-emerald-400 font-black rounded-xl border border-gray-700 outline-none text-sm cursor-pointer">
-              <option value="buyer">RETAIL BUYER</option>
-              <option value="farmer">CONTRACT FARMER</option>
-              <option value="inspector">HUB STAFF</option>
-              <option value="admin">SYSTEM ADMIN</option>
-            </select>
+        <!-- User Quick Card inside Drawer -->
+        <div class="bg-gray-800/90 rounded-2xl p-4 border border-gray-700 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black">
+              <i data-lucide="user" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p id="drawerProfileName" class="text-sm font-bold text-white">Tanvir Ahmed</p>
+              <p id="drawerProfileRole" class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">RETAIL BUYER</p>
+            </div>
+          </div>
+          <button onclick="navigateTo('profile'); toggleMobileNav();" class="text-xs bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 rounded-xl font-bold">
+            Profile
+          </button>
+        </div>
+
+        <!-- Role-Based Navigation Items for Mobile -->
+        <div class="space-y-4">
+          <p class="text-[11px] font-extrabold uppercase tracking-widest text-gray-400">Navigation Menu</p>
+          
+          <!-- BUYER-ONLY LINKS -->
+          <div id="drawerBuyerLinks" class="space-y-2">
+            <button onclick="navigateTo('marketplace'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="store" class="w-5 h-5 text-emerald-400"></i>
+              <span>Marketplace (All 15 Produce)</span>
+            </button>
+            <button onclick="navigateTo('scanner'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="scan-line" class="w-5 h-5 text-emerald-400"></i>
+              <span>AI Quality Scanner</span>
+            </button>
+            <button onclick="navigateTo('hubs'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="map-pin" class="w-5 h-5 text-emerald-400"></i>
+              <span>Hub Experience Centers</span>
+            </button>
           </div>
 
-          <div>
-            <label class="block text-[11px] font-bold text-gray-400 mb-1 uppercase tracking-wider">Select Language (ভাষা)</label>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="setLanguage('en');" id="mobLangEn" class="py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl transition">English</button>
-              <button onclick="setLanguage('bn');" id="mobLangBn" class="py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl transition">বাংলা</button>
-            </div>
+          <!-- FARMER-ONLY LINKS -->
+          <div id="drawerFarmerLinks" class="space-y-2 hidden">
+            <button onclick="navigateTo('contracts'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i>
+              <span>Harvest Desk (Contracts)</span>
+            </button>
+            <button onclick="navigateTo('farmer-prices'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i>
+              <span>Guaranteed Price Board</span>
+            </button>
+            <button onclick="navigateTo('farmer-dispatch'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="truck" class="w-5 h-5 text-emerald-400"></i>
+              <span>Batch Dispatch (QR Tokens)</span>
+            </button>
+            <button onclick="navigateTo('farmer-iot'); toggleMobileNav();" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-800/50 hover:bg-gray-800 text-sm font-bold text-gray-200 hover:text-emerald-400 transition">
+              <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
+              <span>Field Conditions (Soil Diagnostics)</span>
+            </button>
           </div>
         </div>
 
-        <!-- Vertical Menu Items -->
-        <div class="py-6 space-y-4 text-base font-bold">
-          <div class="mobile-buyer-link space-y-4">
-            <div><button onclick="navigateTo('home'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="home" class="w-5 h-5 text-emerald-400"></i> Home</button></div>
-            <div><button onclick="navigateTo('marketplace'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="store" class="w-5 h-5 text-emerald-400"></i> Marketplace</button></div>
-            <div><button onclick="navigateTo('scanner'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="scan-line" class="w-5 h-5 text-emerald-400"></i> AI Quality Scanner</button></div>
-            <div><button onclick="navigateTo('hubs'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-emerald-400"></i> Hub Centers</button></div>
-          </div>
+        <!-- Role Switcher Inside Drawer -->
+        <div class="pt-4 border-t border-gray-800 space-y-3">
+          <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Switch Ecosystem Role</label>
+          <select id="mobileRoleSelect" onchange="applyRolePermissions(this.value); toggleMobileNav();" class="w-full py-2.5 px-3 bg-gray-800 text-emerald-400 font-black rounded-xl border border-gray-700 outline-none text-xs cursor-pointer">
+            <option value="buyer">RETAIL BUYER</option>
+            <option value="farmer">CONTRACT FARMER</option>
+            <option value="inspector">HUB STAFF</option>
+            <option value="admin">SYSTEM ADMIN</option>
+          </select>
+        </div>
 
-          <div class="mobile-farmer-link hidden space-y-4">
-            <div><button onclick="navigateTo('contracts'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i> Harvest Desk</button></div>
-            <div><button onclick="navigateTo('farmer-prices'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i> Price Board</button></div>
-            <div><button onclick="navigateTo('farmer-dispatch'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="truck" class="w-5 h-5 text-emerald-400"></i> Batch Dispatch</button></div>
-            <div><button onclick="navigateTo('farmer-iot'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i> Field Conditions</button></div>
-          </div>
-
-          <div class="pt-2 border-t border-gray-800">
-            <button onclick="navigateTo('profile'); toggleMobileNav();" class="hover:text-emerald-400 transition flex items-center gap-3"><i data-lucide="user-check" class="w-5 h-5 text-emerald-400"></i> My Account Profile</button>
+        <!-- Language Switcher Inside Drawer -->
+        <div class="space-y-2">
+          <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Language (ভাষা)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="setLanguage('en');" id="mobLangEn" class="py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl">English</button>
+            <button onclick="setLanguage('bn');" id="mobLangBn" class="py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl">বাংলা</button>
           </div>
         </div>
       </div>
 
-      <div class="pt-4 border-t border-gray-800 flex items-center justify-between text-xs text-gray-400">
-        <span>Agro Bridge Ecosystem</span>
-        <button onclick="openAuthModal(); toggleMobileNav();" class="text-emerald-400 font-bold">Login Options</button>
+      <!-- Drawer Footer Auth Button -->
+      <div class="pt-6 border-t border-gray-800 mt-6 flex items-center justify-between text-xs text-gray-400">
+        <span>Agro Bridge BD 2026</span>
+        <button onclick="openAuthModal(); toggleMobileNav();" class="text-emerald-400 font-bold hover:underline">
+          Switch / Re-login
+        </button>
       </div>
     </div>
   </header>
@@ -384,7 +450,7 @@
           </div>
         </section>
 
-        <!-- Featured Produce Picks -->
+        <!-- Featured Produce Picks with Live Star Rating -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div class="flex items-center justify-between mb-8">
             <div>
@@ -581,47 +647,115 @@
 
     </div>
 
-    <!-- ================= USER PROFILE VIEW (/profile) ================= -->
-    <div id="pageProfile" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
-      <div class="flex items-center justify-between border-b pb-6">
+    <!-- ================= PROFESSIONAL USER PROFILE DASHBOARD (/profile) ================= -->
+    <div id="pageProfile" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
         <div>
           <span class="text-xs font-bold text-brand-leaf uppercase tracking-wider">Account Overview</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-brand-charcoal">User Profile & Session</h2>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-charcoal">User Profile & Activity Dashboard</h2>
         </div>
-        <button onclick="openAuthModal()" class="px-4 py-2 bg-brand-mint hover:bg-emerald-200 text-brand-forest text-xs font-bold rounded-xl transition">
-          Switch Role / Re-login
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="openAuthModal()" class="px-4 py-2.5 bg-brand-mint hover:bg-emerald-200 text-brand-forest text-xs font-bold rounded-xl transition">
+            Switch Role / Re-login
+          </button>
+          <button onclick="toggleUserAuthStatus()" class="px-4 py-2.5 bg-red-50 hover:bg-red-100 text-brand-alertRed text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span id="profileLogoutBtnText">Sign Out</span>
+          </button>
+        </div>
       </div>
 
+      <!-- User Card Header -->
       <div class="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-100 shadow-soft space-y-6">
-        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 pb-6 border-b border-gray-100 text-center sm:text-left">
-          <div class="w-20 h-20 rounded-full bg-brand-mint border-2 border-brand-leaf flex items-center justify-center text-brand-forest text-2xl font-black shrink-0">
-            <i data-lucide="user" class="w-10 h-10"></i>
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-gray-100 text-center sm:text-left">
+          <div class="w-24 h-24 rounded-full bg-brand-mint border-4 border-emerald-200 flex items-center justify-center text-brand-forest text-3xl font-black shrink-0 relative shadow-inner">
+            <i data-lucide="user" class="w-12 h-12 text-brand-forest"></i>
+            <span class="absolute bottom-1 right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full"></span>
           </div>
-          <div class="space-y-1 flex-1">
+          <div class="space-y-1.5 flex-1">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <h3 id="profileNameDisplay" class="text-xl font-bold text-gray-900">Registered Partner Account</h3>
+              <h3 id="profileNameDisplay" class="text-2xl font-black text-gray-900">Tanvir Ahmed</h3>
               <span id="profileRoleBadgeDisplay" class="text-[10px] font-black bg-brand-mint text-brand-forest px-3 py-1 rounded-full uppercase self-center sm:self-auto">Retail Buyer</span>
             </div>
             <p id="profileEmailDisplay" class="text-xs text-gray-500 font-mono">buyer@agrobridge.bd</p>
-            <p class="text-xs text-brand-leaf font-bold pt-1">Chattogram Central Logistics Hub</p>
+            <p class="text-xs text-brand-leaf font-bold">Default Supply Center: Chattogram Central Logistics Hub (Agrabad)</p>
+            <p class="text-xs text-gray-400">Member ID: #AG-BD-2026-9942 • Member Since: Jan 2026</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Metric Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
             <p class="text-[10px] font-bold text-gray-400 uppercase">Registered Status</p>
             <p class="text-sm font-black text-brand-forest mt-1">Verified Agro-ID</p>
           </div>
           <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
-            <p class="text-[10px] font-bold text-gray-400 uppercase">Default Hub Port</p>
-            <p class="text-sm font-black text-brand-charcoal mt-1">Agrabad Commercial Hub</p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Default Hub</p>
+            <p class="text-sm font-black text-brand-charcoal mt-1">Agrabad Hub</p>
           </div>
           <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
-            <p class="text-[10px] font-bold text-gray-400 uppercase">Payout Gateway</p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Wallet / Payout</p>
             <p class="text-sm font-black text-pink-600 mt-1">bKash Linked</p>
           </div>
+          <div class="bg-brand-canvas p-4 rounded-2xl border border-emerald-50">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Platform Rating</p>
+            <div class="flex items-center gap-1 mt-1 text-yellow-500 font-black text-sm">
+              <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+              <span class="text-gray-900">4.9 / 5.0</span>
+            </div>
+          </div>
         </div>
+
+        <!-- Recent Activity & Detailed Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100 text-xs">
+          <div class="space-y-3">
+            <h4 class="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+              <i data-lucide="package" class="w-4 h-4 text-brand-leaf"></i>
+              <span>Recent Fresh Orders & Dispatches</span>
+            </h4>
+            <div class="space-y-2">
+              <div class="p-3 bg-brand-canvas rounded-xl border border-emerald-50 flex justify-between items-center">
+                <div>
+                  <p class="font-bold text-gray-900">Order #ORD-7781 (Tomatoes & Spinach)</p>
+                  <p class="text-[10px] text-gray-400">Dispatched via 4°C Chilled Van • Agrabad Hub</p>
+                </div>
+                <span class="text-[10px] font-bold bg-brand-mint text-brand-forest px-2 py-0.5 rounded">DELIVERED</span>
+              </div>
+              <div class="p-3 bg-brand-canvas rounded-xl border border-emerald-50 flex justify-between items-center">
+                <div>
+                  <p class="font-bold text-gray-900">Order #ORD-7720 (Sweet Carrots)</p>
+                  <p class="text-[10px] text-gray-400">Harvest Verified • Cold-chain Transit</p>
+                </div>
+                <span class="text-[10px] font-bold bg-brand-mint text-brand-forest px-2 py-0.5 rounded">COMPLETED</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h4 class="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-brand-leaf"></i>
+              <span>Delivery Address & Preferences</span>
+            </h4>
+            <div class="p-4 bg-brand-canvas rounded-xl border border-emerald-50 space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-500">Delivery Address:</span>
+                <span class="font-bold text-gray-800">Road 12, Nasirabad, Chattogram</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">Contact Mobile:</span>
+                <span class="font-bold text-gray-800 font-mono">+880 1712-345678</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">Quality Inspection:</span>
+                <span class="font-bold text-brand-leaf">AI Spectrometer Certified</span>
+              </div>
+              <button onclick="alert('Profile details editor opened')" class="w-full mt-2 py-2 border border-emerald-200 text-brand-forest font-bold rounded-lg hover:bg-white transition text-xs">
+                Edit Contact & Sourcing Settings
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -686,12 +820,12 @@
           <div>
             <label class="block font-bold text-gray-700 mb-1">Select Crop</label>
             <select id="dispatchCropSelect" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 font-semibold auth-input">
-              <option>Red Vine Tomatoes (টমেটো)</option>
-              <option>Bitter Gourd / Karela (করলা)</option>
+              <option>Tomatoes (টমেটো)</option>
               <option>Green Cucumbers (শসা)</option>
               <option>Organic Sweet Carrots (গাজর)</option>
               <option>Diamant Potatoes (গোল আলু)</option>
               <option>Fresh Crisp Lettuce (লেটুস)</option>
+              <option>Strawberry (স্ট্রবেরি)</option>
             </select>
           </div>
 
@@ -776,6 +910,41 @@
 
   </main>
 
+  <!-- ================= PRODUCT RATING & REVIEW MODAL ================= -->
+  <div id="ratingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 border border-emerald-100 shadow-2xl relative space-y-4">
+      <button onclick="closeRatingModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="text-center space-y-1">
+        <span class="text-[10px] font-bold text-brand-leaf uppercase tracking-wider">Quality Feedback</span>
+        <h3 id="ratingProduceTitle" class="text-xl font-extrabold text-gray-900">Rate Freshness</h3>
+        <p class="text-xs text-gray-500">Your direct review impacts farmer verified badges and hub quality logs.</p>
+      </div>
+
+      <!-- 5 Interactive Stars -->
+      <div class="flex items-center justify-center gap-2 py-3" id="starRatingContainer">
+        <button type="button" onclick="setStarRating(1)" class="star-btn p-1 text-gray-300 hover:text-yellow-400 transition transform hover:scale-110"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setStarRating(2)" class="star-btn p-1 text-gray-300 hover:text-yellow-400 transition transform hover:scale-110"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setStarRating(3)" class="star-btn p-1 text-gray-300 hover:text-yellow-400 transition transform hover:scale-110"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setStarRating(4)" class="star-btn p-1 text-gray-300 hover:text-yellow-400 transition transform hover:scale-110"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setStarRating(5)" class="star-btn p-1 text-gray-300 hover:text-yellow-400 transition transform hover:scale-110"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Feedback Comments</label>
+          <textarea id="ratingComment" rows="3" placeholder="How was the crispness, taste, and freshness upon delivery?" class="w-full p-3 border border-gray-200 rounded-xl auth-input text-xs"></textarea>
+        </div>
+
+        <button onclick="submitReview()" class="w-full py-3.5 bg-brand-forest hover:bg-emerald-900 text-white font-bold rounded-xl shadow-md transition">
+          Submit Produce Review
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= SLIDE-OVER CART & CHECKOUT DRAWER ================= -->
   <div id="cartDrawer" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
     <div id="cartDrawerContent" class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between p-5 sm:p-6 transform translate-x-full transition-transform duration-300">
@@ -811,13 +980,11 @@
         <div>
           <label class="block font-bold text-gray-700 mb-1.5 uppercase tracking-wider text-[10px]" data-key="cartGateway">Select Payment Gateway</label>
           <div class="grid grid-cols-3 gap-2">
-            <!-- bKash Image Tag -->
             <button type="button" onclick="selectPayMethod('bkash')" id="payBkash" class="py-2 px-1 rounded-xl bg-pink-50 border-2 border-pink-500 flex flex-col items-center justify-center gap-1 transition shadow-sm hover:scale-105">
               <img src="bkash-logo.png" onerror="this.outerHTML='<span class=\'text-pink-600 font-black text-xs\'>bKash</span>'" alt="bKash" class="h-6 object-contain" />
               <span class="text-[10px] font-black text-pink-700">bKash</span>
             </button>
 
-            <!-- Nagad Vector SVG Emblem -->
             <button type="button" onclick="selectPayMethod('nagad')" id="payNagad" class="py-2 px-1 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center gap-1 transition hover:scale-105">
               <svg class="h-6 w-auto" viewBox="0 0 100 100" fill="none">
                 <path d="M78 30C86 42 85 58 75 70C65 82 48 88 33 83C18 78 8 63 9 47C10 31 22 18 37 13C50 9 64 12 73 21" stroke="#ED1C24" stroke-width="12" stroke-linecap="round"/>
@@ -827,10 +994,9 @@
               <span class="text-[10px] font-black text-gray-700">Nagad</span>
             </button>
 
-            <!-- Visa Image Tag with visa.png fallback -->
             <button type="button" onclick="selectPayMethod('card')" id="payCard" class="py-2 px-1 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center gap-1 transition hover:scale-105">
               <img src="visa.png" onerror="this.src='visa-logo.png'; this.onerror=function(){this.outerHTML='<span class=\'text-blue-700 font-black text-xs\'>Visa</span>'}" alt="Visa" class="h-6 object-contain" />
-              <span class="text-[10px] font-black text-gray-700">Visa/Card</span>
+              <span class="text-[10px] font-black text-gray-700">Visa</span>
             </button>
           </div>
         </div>
@@ -866,7 +1032,7 @@
             <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center p-1.5 border border-white/30 shadow-md">
               <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-emerald-300">
                 <path d="M60 28C57 14 42 12 42 12C42 12 41 30 54 36C50 29 56 20 60 28Z" fill="#86EFAC"/>
-                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#2E7D32"/>
+                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#4ADE80"/>
                 <path d="M18 78C38 48 82 48 102 78V72C82 42 38 42 18 72V78Z" fill="#86EFAC"/>
               </svg>
             </div>
@@ -1054,7 +1220,7 @@
             <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center p-1.5 border border-white/30 shadow-md">
               <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-emerald-300">
                 <path d="M60 28C57 14 42 12 42 12C42 12 41 30 54 36C50 29 56 20 60 28Z" fill="#86EFAC"/>
-                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#2E7D32"/>
+                <path d="M60 28C63 14 78 12 78 12C78 12 79 30 66 36C70 29 64 20 60 28Z" fill="#4ADE80"/>
                 <path d="M18 78C38 48 82 48 102 78V72C82 42 38 42 18 72V78Z" fill="#86EFAC"/>
               </svg>
             </div>
@@ -1186,21 +1352,21 @@
   <!-- ================= SCRIPT & DATA LOGIC ================= -->
   <script>
     const VEGETABLES = [
-      { id: 1, name: "Tomatoes", bangla: "টমেটো", cat: "all", price: 38, oldPrice: 58, faria: 24, disc: "35% OFF", score: 92, shelf: "5 Days", origin: "Hathazari, Chattogram", img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80" },
-      { id: 2, name: "Green Cucumbers", bangla: "শসা", cat: "all", price: 28, oldPrice: 45, faria: 18, disc: "38% OFF", score: 88, shelf: "4 Days", origin: "Bogura Sadar Hub", img: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=500&q=80" },
-      { id: 3, name: "Organic Sweet Carrots", bangla: "গাজর", cat: "roots", price: 45, oldPrice: 56, faria: 30, disc: "20% OFF", score: 96, shelf: "6 Days", origin: "Rajshahi Farm Hub", img: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=500&q=80" },
-      { id: 4, name: "Fresh Crisp Lettuce", bangla: "লেটুস", cat: "leafy", price: 22, oldPrice: 30, faria: 14, disc: "Grade A", score: 91, shelf: "5 Days", origin: "Agrabad Hub", img: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=500&q=80" },
-      { id: 5, name: "Farm Fresh Spinach", bangla: "পালং শাক", cat: "leafy", price: 10.90, oldPrice: 15, faria: 6, disc: "Fresh", score: 95, shelf: "5 Days", origin: "Hathazari Hub", img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=500&q=80" },
-      { id: 6, name: "Diamant Potatoes", bangla: "গোল আলু", cat: "roots", price: 32, oldPrice: 40, faria: 21, disc: "Export", score: 98, shelf: "20 Days", origin: "Munshiganj Hub", img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=500&q=80" },
-      { id: 7, name: "Bell Peppers", bangla: "ক্যাপসিকাম", cat: "all", price: 120, oldPrice: 150, faria: 75, disc: "Grade A", score: 94, shelf: "7 Days", origin: "Hathazari Greenhouse", img: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=500&q=80" },
-      { id: 8, name: "Spicy Red Chili", bangla: "পাকা লাল মরিচ", cat: "all", price: 85, oldPrice: 110, faria: 50, disc: "Piquant", score: 97, shelf: "8 Days", origin: "Bogura Hub", img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=500&q=80" },
-      { id: 9, name: "Brocoli", bangla: "ব্রকলি", cat: "all", price: 52, oldPrice: 65, faria: 32, disc: "Organic", score: 90, shelf: "5 Days", origin: "Comilla Hub", img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=500&q=80" },
-      { id: 10, name: "Stawberry", bangla: "স্ট্রবেরি", cat: "roots", price: 48, oldPrice: 60, faria: 30, disc: "20% OFF", score: 93, shelf: "6 Days", origin: "Narsingdi Hub", img: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=500&q=80" },
-      { id: 11, name: "Fresh Cauliflower", bangla: "ফুলকপি", cat: "all", price: 35, oldPrice: 45, faria: 22, disc: "Peak Fresh", score: 95, shelf: "5 Days", origin: "Jessore Hub", img: "https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?auto=format&fit=crop&w=500&q=80" },
-      { id: 12, name: "Cabbage", bangla: "বাঁধাকপি", cat: "leafy", price: 60, oldPrice: 80, faria: 38, disc: "Grade A", score: 96, shelf: "9 Days", origin: "Rajshahi Hub", img: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=500&q=80" },
-      { id: 13, name: "Potato", bangla: "আলু", cat: "roots", price: 40, oldPrice: 55, faria: 25, disc: "Organic", score: 92, shelf: "7 Days", origin: "Hathazari Hub", img: "https://images.unsplash.com/photo-1590165482129-1b8b27698780?auto=format&fit=crop&w=500&q=80" },
-      { id: 14, name: "Ripe Papaya", bangla: "পাকা পেঁপে", cat: "roots", price: 25, oldPrice: 35, faria: 15, disc: "Fresh", score: 95, shelf: "10 Days", origin: "Chittagong Hill Tracts", img: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?auto=format&fit=crop&w=500&q=80" },
-      { id: 15, name: "Okra (Lady Finger)", bangla: "ঢ্যাঁড়শ", cat: "all", price: 42, oldPrice: 55, faria: 25, disc: "Tender", score: 91, shelf: "4 Days", origin: "Kushtia Hub", img: "https://images.unsplash.com/photo-1425543103986-22abb7d7e8d2?auto=format&fit=crop&w=500&q=80" }
+      { id: 1, name: "Tomatoes", bangla: "টমেটো", cat: "all", price: 38, oldPrice: 58, faria: 24, disc: "35% OFF", score: 92, shelf: "5 Days", origin: "Hathazari, Chattogram", rating: 4.8, ratingCount: 142, img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80" },
+      { id: 2, name: "Green Cucumbers", bangla: "শসা", cat: "all", price: 28, oldPrice: 45, faria: 18, disc: "38% OFF", score: 88, shelf: "4 Days", origin: "Bogura Sadar Hub", rating: 4.6, ratingCount: 98, img: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=500&q=80" },
+      { id: 3, name: "Organic Sweet Carrots", bangla: "গাজর", cat: "roots", price: 45, oldPrice: 56, faria: 30, disc: "20% OFF", score: 96, shelf: "6 Days", origin: "Rajshahi Farm Hub", rating: 4.9, ratingCount: 215, img: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=500&q=80" },
+      { id: 4, name: "Fresh Crisp Lettuce", bangla: "লেটুস", cat: "leafy", price: 22, oldPrice: 30, faria: 14, disc: "Grade A", score: 91, shelf: "5 Days", origin: "Agrabad Hub", rating: 4.7, ratingCount: 76, img: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=500&q=80" },
+      { id: 5, name: "Farm Fresh Spinach", bangla: "পালং শাক", cat: "leafy", price: 10.90, oldPrice: 15, faria: 6, disc: "Fresh", score: 95, shelf: "5 Days", origin: "Hathazari Hub", rating: 4.9, ratingCount: 310, img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=500&q=80" },
+      { id: 6, name: "Diamant Potatoes", bangla: "গোল আলু", cat: "roots", price: 32, oldPrice: 40, faria: 21, disc: "Export", score: 98, shelf: "20 Days", origin: "Munshiganj Hub", rating: 4.9, ratingCount: 180, img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=500&q=80" },
+      { id: 7, name: "Bell Peppers", bangla: "ক্যাপসিকাম", cat: "all", price: 120, oldPrice: 150, faria: 75, disc: "Grade A", score: 94, shelf: "7 Days", origin: "Hathazari Greenhouse", rating: 4.8, ratingCount: 84, img: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=500&q=80" },
+      { id: 8, name: "Spicy Red Chili", bangla: "পাকা লাল মরিচ", cat: "all", price: 85, oldPrice: 110, faria: 50, disc: "Piquant", score: 97, shelf: "8 Days", origin: "Bogura Hub", rating: 4.6, ratingCount: 65, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=500&q=80" },
+      { id: 9, name: "Brocoli", bangla: "ব্রকলি", cat: "all", price: 52, oldPrice: 65, faria: 32, disc: "Organic", score: 90, shelf: "5 Days", origin: "Comilla Hub", rating: 4.7, ratingCount: 112, img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=500&q=80" },
+      { id: 10, name: "Strawberry", bangla: "স্ট্রবেরি", cat: "roots", price: 48, oldPrice: 60, faria: 30, disc: "20% OFF", score: 93, shelf: "6 Days", origin: "Narsingdi Hub", rating: 4.9, ratingCount: 190, img: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=500&q=80" },
+      { id: 11, name: "Fresh Cauliflower", bangla: "ফুলকপি", cat: "all", price: 35, oldPrice: 45, faria: 22, disc: "Peak Fresh", score: 95, shelf: "5 Days", origin: "Jessore Hub", rating: 4.8, ratingCount: 94, img: "https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?auto=format&fit=crop&w=500&q=80" },
+      { id: 12, name: "Cabbage", bangla: "বাঁধাকপি", cat: "leafy", price: 60, oldPrice: 80, faria: 38, disc: "Grade A", score: 96, shelf: "9 Days", origin: "Rajshahi Hub", rating: 4.7, ratingCount: 88, img: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=500&q=80" },
+      { id: 13, name: "Potato", bangla: "আলু", cat: "roots", price: 40, oldPrice: 55, faria: 25, disc: "Organic", score: 92, shelf: "7 Days", origin: "Hathazari Hub", rating: 4.8, ratingCount: 160, img: "https://images.unsplash.com/photo-1590165482129-1b8b27698780?auto=format&fit=crop&w=500&q=80" },
+      { id: 14, name: "Ripe Papaya", bangla: "পাকা পেঁপে", cat: "roots", price: 25, oldPrice: 35, faria: 15, disc: "Fresh", score: 95, shelf: "10 Days", origin: "Chittagong Hill Tracts", rating: 4.9, ratingCount: 220, img: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?auto=format&fit=crop&w=500&q=80" },
+      { id: 15, name: "Okra (Lady Finger)", bangla: "ঢ্যাঁড়শ", cat: "all", price: 42, oldPrice: 55, faria: 25, disc: "Tender", score: 91, shelf: "4 Days", origin: "Kushtia Hub", rating: 4.6, ratingCount: 72, img: "https://images.unsplash.com/photo-1425543103986-22abb7d7e8d2?auto=format&fit=crop&w=500&q=80" }
     ];
 
     const TRANSLATIONS = {
@@ -1328,15 +1494,44 @@
     let currentLang = 'en';
     let selectedPayGateway = 'bkash';
     let chosenRegistrationRole = 'buyer';
+    let isLoggedIn = true;
+    let currentRatingProduceId = null;
+    let activeStarCount = 5;
     let webcamStream = null;
+
     let cart = [
-      { id: 1, name: "Red Vine Tomatoes", price: 38.00, qty: 2 },
+      { id: 1, name: "Tomatoes", price: 38.00, qty: 2 },
       { id: 5, name: "Farm Fresh Spinach", price: 10.90, qty: 1 }
     ];
 
     function toggleMobileNav() {
       const drawer = document.getElementById('mobileNavDrawer');
-      drawer.classList.toggle('hidden');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+        drawer.classList.toggle('flex');
+      }
+    }
+
+    function toggleProfileDropdown() {
+      const popover = document.getElementById('profilePopoverMenu');
+      if (popover) {
+        popover.classList.toggle('hidden');
+      }
+    }
+
+    document.addEventListener('click', function(e) {
+      const popover = document.getElementById('profilePopoverMenu');
+      const profileBtn = e.target.closest('[onclick="toggleProfileDropdown()"]');
+      if (popover && !popover.classList.contains('hidden') && !profileBtn && !popover.contains(e.target)) {
+        popover.classList.add('hidden');
+      }
+    });
+
+    function toggleAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id + 'Icon');
+      if (el) el.classList.toggle('hidden');
+      if (icon) icon.classList.toggle('rotate-180');
     }
 
     function handleLogoClick() {
@@ -1348,7 +1543,65 @@
     }
 
     function handleProfileAuthClick() {
-      navigateTo('profile');
+      if (!isLoggedIn) {
+        openAuthModal();
+      } else {
+        navigateTo('profile');
+      }
+    }
+
+    function toggleUserAuthStatus() {
+      if (isLoggedIn) {
+        isLoggedIn = false;
+        alert('You have successfully signed out.');
+      } else {
+        openAuthModal();
+        return;
+      }
+      updateAuthUIState();
+      navigateTo('home');
+    }
+
+    function updateAuthUIState() {
+      const headerLabel = document.getElementById('headerProfileLabel');
+      const popoverName = document.getElementById('popoverName');
+      const popoverEmail = document.getElementById('popoverEmail');
+      const popoverRole = document.getElementById('popoverRole');
+      const popoverAuthAction = document.getElementById('popoverAuthAction');
+      const drawerProfileName = document.getElementById('drawerProfileName');
+      const drawerProfileRole = document.getElementById('drawerProfileRole');
+      const drawerAuthActionBtn = document.getElementById('drawerAuthActionBtn');
+      const profileLogoutBtnText = document.getElementById('profileLogoutBtnText');
+
+      if (!isLoggedIn) {
+        if (headerLabel) headerLabel.innerText = "Sign In";
+        if (popoverName) popoverName.innerText = "Guest Visitor";
+        if (popoverEmail) popoverEmail.innerText = "Click to authenticate";
+        if (popoverRole) popoverRole.innerText = "Not Signed In";
+        if (popoverAuthAction) popoverAuthAction.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-emerald-600"></i><span class="text-emerald-700">Sign In</span>`;
+        if (drawerProfileName) drawerProfileName.innerText = "Guest Visitor";
+        if (drawerProfileRole) drawerProfileRole.innerText = "NOT SIGNED IN";
+        if (drawerAuthActionBtn) drawerAuthActionBtn.innerText = "Sign In";
+        if (profileLogoutBtnText) profileLogoutBtnText.innerText = "Sign In";
+      } else {
+        const nameMap = {
+          'buyer': 'Tanvir Ahmed',
+          'farmer': 'Abdul Karim',
+          'inspector': 'Rafiqul Islam',
+          'admin': 'System Lead Admin'
+        };
+        const currentName = nameMap[currentAuthRole] || 'User Profile';
+        if (headerLabel) headerLabel.innerText = currentName.split(' ')[0];
+        if (popoverName) popoverName.innerText = currentName;
+        if (popoverEmail) popoverEmail.innerText = `${currentAuthRole}@agrobridge.bd`;
+        if (popoverRole) popoverRole.innerText = currentAuthRole.replace('-', ' ');
+        if (popoverAuthAction) popoverAuthAction.innerHTML = `<i data-lucide="log-out" class="w-4 h-4"></i><span>Sign Out</span>`;
+        if (drawerProfileName) drawerProfileName.innerText = currentName;
+        if (drawerProfileRole) drawerProfileRole.innerText = currentAuthRole.toUpperCase();
+        if (drawerAuthActionBtn) drawerAuthActionBtn.innerText = "Sign Out";
+        if (profileLogoutBtnText) profileLogoutBtnText.innerText = "Sign Out";
+      }
+      lucide.createIcons();
     }
 
     function navigateTo(pageId) {
@@ -1452,7 +1705,14 @@
               <img src="${veg.img}" alt="${veg.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               <span class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-lg">Batch #AG-${7720 + veg.id}</span>
             </div>
-            <h3 class="font-extrabold text-base text-gray-900">${veg.name} (${veg.bangla})</h3>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-extrabold text-base text-gray-900 truncate">${veg.name} (${veg.bangla})</h3>
+              <button onclick="openRatingModal(${veg.id})" title="Rate produce" class="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 px-2 py-0.5 rounded-lg text-amber-600 transition shrink-0">
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i>
+                <span class="text-[11px] font-black">${veg.rating}</span>
+                <span class="text-[9px] text-gray-400">(${veg.ratingCount})</span>
+              </button>
+            </div>
             <p class="text-xs text-brand-muted font-medium mb-2">${veg.origin}</p>
             <div class="bg-brand-mint text-brand-forest text-xs font-bold px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 mb-2">
               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-brand-leaf"></i>
@@ -1471,6 +1731,51 @@
           </div>
         </div>
       `;
+    }
+
+    // --- RATING SYSTEM FUNCTIONS ---
+    function openRatingModal(id) {
+      currentRatingProduceId = id;
+      const veg = VEGETABLES.find(v => v.id === id);
+      if (veg) {
+        document.getElementById('ratingProduceTitle').innerText = `${veg.name} (${veg.bangla})`;
+      }
+      setStarRating(5);
+      const modal = document.getElementById('ratingModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeRatingModal() {
+      const modal = document.getElementById('ratingModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function setStarRating(num) {
+      activeStarCount = num;
+      const buttons = document.querySelectorAll('.star-btn');
+      buttons.forEach((btn, index) => {
+        if (index < num) {
+          btn.classList.remove('text-gray-300');
+          btn.classList.add('text-yellow-400');
+        } else {
+          btn.classList.add('text-gray-300');
+          btn.classList.remove('text-yellow-400');
+        }
+      });
+    }
+
+    function submitReview() {
+      const comment = document.getElementById('ratingComment').value;
+      const veg = VEGETABLES.find(v => v.id === currentRatingProduceId);
+      if (veg) {
+        veg.ratingCount++;
+        veg.rating = Number(((veg.rating * (veg.ratingCount - 1) + activeStarCount) / veg.ratingCount).toFixed(1));
+      }
+      alert(`Thank you! Your ${activeStarCount}-star review for ${veg ? veg.name : 'produce'} has been submitted.`);
+      closeRatingModal();
+      document.getElementById('ratingComment').value = '';
+      renderFeatured();
+      renderCatalog();
     }
 
     function renderFarmerPriceBoard() {
@@ -1782,6 +2087,7 @@
       const name = document.getElementById('regName').value;
       alert(`Account Created Successfully for ${name} as [${chosenRegistrationRole.toUpperCase()}].`);
       closeRegistrationFormModal();
+      isLoggedIn = true;
       applyRolePermissions(chosenRegistrationRole);
     }
 
@@ -1790,13 +2096,15 @@
       const contact = document.getElementById('authEmailInput').value;
       alert(`Authenticated successfully as [${currentAuthRole.toUpperCase()}]: ${contact}`);
       closeAuthModal();
+      isLoggedIn = true;
       applyRolePermissions(currentAuthRole);
     }
 
-    // --- INSTANT AUTO-SWITCH PERMISSIONS ---
+    // --- INSTANT AUTO-SWITCH ROLE-BASED PERMISSIONS ---
     function applyRolePermissions(role) {
       currentAuthRole = role;
 
+      // Synchronize role dropdown indicators
       const mobileRoleSelect = document.getElementById('mobileRoleSelect');
       const modalSelect = document.getElementById('testUserRoleSelect');
       const roleIndLabel = document.getElementById('roleIndicatorLabel');
@@ -1805,6 +2113,15 @@
       if (modalSelect) modalSelect.value = role;
       if (roleIndLabel) roleIndLabel.innerText = role.toUpperCase();
 
+      // Navigation containers
+      const buyerDesktopNav = document.querySelectorAll('.buyer-nav-item');
+      const farmerDesktopNav = document.querySelectorAll('.farmer-nav-item');
+      const drawerBuyerLinks = document.getElementById('drawerBuyerLinks');
+      const drawerFarmerLinks = document.getElementById('drawerFarmerLinks');
+      const cartBtn = document.getElementById('cartHeaderBtn');
+      const buyerPortalContainer = document.getElementById('buyerPortalContainer');
+
+      // Update role-based email placeholder & profile badges
       const roleContactMap = {
         'buyer': 'buyer@agrobridge.bd',
         'farmer': 'farmer.karim@agrobridge.bd',
@@ -1814,7 +2131,6 @@
       const emailInput = document.getElementById('authEmailInput');
       if (emailInput) emailInput.value = roleContactMap[role];
 
-      // Update Profile Page Data
       const profileRoleMap = {
         'buyer': 'Retail Buyer',
         'farmer': 'Contract Farmer',
@@ -1823,9 +2139,9 @@
       };
       const profileNameMap = {
         'buyer': 'Tanvir Ahmed',
-        'farmer': 'Abdul Karim (Contract Farmer)',
-        'inspector': 'Rafiqul Islam (Hub Staff)',
-        'admin': 'Administrator Lead'
+        'farmer': 'Abdul Karim',
+        'inspector': 'Rafiqul Islam',
+        'admin': 'System Lead Admin'
       };
       const nameEl = document.getElementById('profileNameDisplay');
       const roleBadgeEl = document.getElementById('profileRoleBadgeDisplay');
@@ -1835,56 +2151,56 @@
       if (emailEl) emailEl.innerText = roleContactMap[role];
 
       const partnerRoleLabel = document.getElementById('partnerRoleLabel');
-      const cartBtn = document.getElementById('cartHeaderBtn');
-      const buyerPortalContainer = document.getElementById('buyerPortalContainer');
-
-      const buyerLinks = document.querySelectorAll('.buyer-link');
-      const farmerLinks = document.querySelectorAll('.farmer-link');
-      const mobileBuyerLinks = document.querySelectorAll('.mobile-buyer-link');
-      const mobileFarmerLinks = document.querySelectorAll('.mobile-farmer-link');
 
       if (role === 'buyer') {
-        buyerPortalContainer.classList.remove('hidden');
-        buyerLinks.forEach(l => l.classList.remove('hidden'));
-        farmerLinks.forEach(l => l.classList.add('hidden'));
-        mobileBuyerLinks.forEach(l => l.classList.remove('hidden'));
-        mobileFarmerLinks.forEach(l => l.classList.add('hidden'));
-        cartBtn.classList.remove('hidden');
+        // Desktop: show buyer, hide farmer
+        buyerDesktopNav.forEach(el => { el.classList.remove('hidden'); el.classList.add('flex'); });
+        farmerDesktopNav.forEach(el => { el.classList.add('hidden'); el.classList.remove('flex'); });
+
+        // Mobile Drawer: show buyer, hide farmer
+        if (drawerBuyerLinks) { drawerBuyerLinks.classList.remove('hidden'); drawerBuyerLinks.classList.add('block'); }
+        if (drawerFarmerLinks) { drawerFarmerLinks.classList.add('hidden'); drawerFarmerLinks.classList.remove('block'); }
+
+        // Cart is available for retail buyers
+        if (cartBtn) cartBtn.classList.remove('hidden');
+        if (buyerPortalContainer) buyerPortalContainer.classList.remove('hidden');
 
         navigateTo('home');
       } else if (role === 'farmer') {
-        buyerPortalContainer.classList.add('hidden');
-        buyerLinks.forEach(l => l.classList.add('hidden'));
-        farmerLinks.forEach(l => {
-          l.classList.remove('hidden');
-          l.classList.add('flex');
-        });
-        mobileBuyerLinks.forEach(l => l.classList.add('hidden'));
-        mobileFarmerLinks.forEach(l => l.classList.remove('hidden'));
-        cartBtn.classList.add('hidden');
+        // Desktop: hide buyer, show farmer
+        buyerDesktopNav.forEach(el => { el.classList.add('hidden'); el.classList.remove('flex'); });
+        farmerDesktopNav.forEach(el => { el.classList.remove('hidden'); el.classList.add('flex'); });
+
+        // Mobile Drawer: hide buyer, show farmer
+        if (drawerBuyerLinks) { drawerBuyerLinks.classList.add('hidden'); drawerBuyerLinks.classList.remove('block'); }
+        if (drawerFarmerLinks) { drawerFarmerLinks.classList.remove('hidden'); drawerFarmerLinks.classList.add('block'); }
+
+        // Cart is hidden for contract farmers
+        if (cartBtn) cartBtn.classList.add('hidden');
+        if (buyerPortalContainer) buyerPortalContainer.classList.add('hidden');
 
         if (partnerRoleLabel) partnerRoleLabel.innerText = "Contract Farmer Terminal";
-
         updateRoleView('farmer');
         navigateTo('contracts');
       } else {
-        buyerPortalContainer.classList.add('hidden');
-        buyerLinks.forEach(l => l.classList.add('hidden'));
-        farmerLinks.forEach(l => l.classList.add('hidden'));
-        mobileBuyerLinks.forEach(l => l.classList.add('hidden'));
-        mobileFarmerLinks.forEach(l => l.classList.remove('hidden'));
-        cartBtn.classList.add('hidden');
+        // Hub Staff / Admin
+        buyerDesktopNav.forEach(el => { el.classList.add('hidden'); el.classList.remove('flex'); });
+        farmerDesktopNav.forEach(el => { el.classList.add('hidden'); el.classList.remove('flex'); });
+        if (drawerBuyerLinks) { drawerBuyerLinks.classList.add('hidden'); drawerBuyerLinks.classList.remove('block'); }
+        if (drawerFarmerLinks) { drawerFarmerLinks.classList.add('hidden'); drawerFarmerLinks.classList.remove('block'); }
+        if (cartBtn) cartBtn.classList.add('hidden');
+        if (buyerPortalContainer) buyerPortalContainer.classList.add('hidden');
 
         updateRoleView(role);
-
-        if (role === 'inspector') {
-          if (partnerRoleLabel) partnerRoleLabel.innerText = "Hub Staff Inspection Console";
-        } else if (role === 'admin') {
-          if (partnerRoleLabel) partnerRoleLabel.innerText = "Admin Supply Chain Control";
+        if (role === 'inspector' && partnerRoleLabel) {
+          partnerRoleLabel.innerText = "Hub Staff Inspection Console";
+        } else if (role === 'admin' && partnerRoleLabel) {
+          partnerRoleLabel.innerText = "Admin Supply Chain Control";
         }
-
         navigateTo('contracts');
       }
+
+      updateAuthUIState();
       lucide.createIcons();
     }
 
@@ -1937,7 +2253,7 @@
                     <td class="py-2.5 text-brand-leaf">+58.3% Higher</td>
                   </tr>
                   <tr>
-                    <td class="py-2.5 text-gray-900">Strawberry(স্ট্রবেরি)</td>
+                    <td class="py-2.5 text-gray-900">Strawberry (স্ট্রবেরি)</td>
                     <td class="py-2.5 text-brand-forest">BDT 48.00 / kg</td>
                     <td class="py-2.5 text-gray-400 line-through">BDT 32.00</td>
                     <td class="py-2.5 text-brand-leaf">+50.0% Higher</td>
@@ -2051,8 +2367,8 @@
       const mobEn = document.getElementById('mobLangEn');
       const mobBn = document.getElementById('mobLangBn');
       if (mobEn && mobBn) {
-        mobEn.className = lang === 'en' ? 'py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl transition' : 'py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl transition';
-        mobBn.className = lang === 'bn' ? 'py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl transition' : 'py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl transition';
+        mobEn.className = lang === 'en' ? 'py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl' : 'py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl';
+        mobBn.className = lang === 'bn' ? 'py-2 bg-emerald-800 text-white font-bold text-xs rounded-xl' : 'py-2 bg-gray-800 text-gray-300 font-bold text-xs rounded-xl';
       }
 
       const dict = TRANSLATIONS[lang];
@@ -2080,4 +2396,5 @@
     });
   </script>
 </body>
+
 </html>
